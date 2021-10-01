@@ -38,11 +38,18 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
+            ['label' => Yii::t('app', 'Главная'), 'url' => ['/site/index']],
+            [
+                'label' => Yii::t('app', 'Университет'),
+                'items' => [
+                    ['label' => Yii::t('app', 'Миссия университета'), 'url' => '#'],
+                    ['label' => Yii::t('app', 'История Университета'), 'url' => '#'],
+                    ['label' => Yii::t('app', 'Структура'), 'url' => '#'],
+               ],
+            ],
+            ['label' => Yii::t('app', 'Контакты'), 'url' => ['/site/contact']],
             Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
+                ['label' => Yii::t('app', 'Вход'), 'url' => ['/site/login']]
             ) : (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post', ['class' => 'form-inline'])
@@ -53,9 +60,14 @@ AppAsset::register($this);
                 . Html::endForm()
                 . '</li>'
             ),
-            MultiLang::widget(['cssClass'=>'pull-right language']),
+            [
+                'label' => 'RBAC',
+                'url' => ['/rbac'],
+                'visible' => !Yii::$app->user->isGuest,
+            ],
         ],
     ]);
+    echo MultiLang::widget(['cssClass'=>'float-right']);
     NavBar::end();
     ?>
 </header>

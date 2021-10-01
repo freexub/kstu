@@ -7,7 +7,7 @@ use Yii;
 
 <div class="btn-group <?= $cssClass; ?>">
     <a class="btn btn-info dropdown-toggle" data-toggle="dropdown" href="#">
-        <span class="uppercase"><?= Yii::$app->language; ?></span>
+        <span class="uppercase"><?= Yii::t('app', Yii::$app->language); ?></span>
         <span class="caret"></span>
     </a>
     <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu3">
@@ -32,7 +32,7 @@ use Yii;
         <li role="presentation" class="item-lang">
             <?= Html::a('Қазақша', array_merge(
                 \Yii::$app->request->get(),
-                [\Yii::$app->controller->route, 'language' => 'kz']
+                [\Yii::$app->controller->route, 'language' => 'kk']
             ),[
                 'role' => "menuitem",
                 'tabindex' => "-1"
