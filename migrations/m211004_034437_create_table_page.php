@@ -18,7 +18,7 @@ class m211004_034437_create_table_page extends Migration
                 'title' => $this->string(100)->notNull()->comment('Название'),
                 'content' => $this->text()->notNull(),
                 'create_date' => $this->timestamp()->notNull()->comment('Дата создания'),
-                'update_date' => $this->timestamp()->notNull()->comment('Дата обновления'),
+                'update_date' => $this->timestamp()->notNull()->comment('Дата обновления')->append('ON UPDATE CURRENT_TIMESTAMP'),
                 'language_id' => $this->integer(1)->notNull()->comment('Язык'),
                 'post_id' => $this->integer()->notNull(),
             ],
@@ -34,7 +34,7 @@ class m211004_034437_create_table_page extends Migration
             ['post_id'],
             '{{%post}}',
             ['id'],
-            'CASCADE',
+            'RESTRICT',
             'RESTRICT'
         );
         $this->addForeignKey(
