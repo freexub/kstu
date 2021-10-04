@@ -21,7 +21,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= $form->field($model, 'category_id')->dropdownList(
             Category::find()->select(['name', 'id'])->indexBy('id')->column()
-            ) ?>
+            )->hint('Выберите категорию') ?>
 
         <?= $form->field($model, 'status_id')->label(false)->hiddenInput(['value' => 1]) ?>
 

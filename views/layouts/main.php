@@ -48,6 +48,7 @@ AppAsset::register($this);
                ],
             ],
             ['label' => Yii::t('app', 'Контакты'), 'url' => ['/site/contact']],
+            ['label' => Yii::t('app', 'Post'), 'url' => ['/post/index']],
             Yii::$app->user->isGuest ? (
                 ['label' => Yii::t('app', 'Вход'), 'url' => ['/site/login']]
             ) : (
