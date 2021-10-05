@@ -2,7 +2,11 @@
 
 namespace app\controllers;
 
+use Yii;
+use yii\base\Model;
+use app\models\Page;
 use app\models\Post;
+use app\models\PostCategory;
 use app\models\PostSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -66,18 +70,33 @@ class PostController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Post();
+        $page = new Page();
+        $post = new Post();
+        $postCategory = new PostCategory();
+
+        $count = count(Yii::$app->request->post('PostCategory', []));
+        $postCategories = [new PostCategory()];
+        for($i = 1; $i < $count; $i++) {
+            $postCategories[] = new PostCategory();
+        }
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            if ($post->load($this->request->post()) && $post->save()) {
+                $page->post_id = $post->id;
+                $page->create_date = $page->update_date = date("Y-m-d H:i:s");
+                if ($page->load($this->request->post()) && $page->save()) {
+                    return '<pre>' . var_dump($postCategories) . '</pre>';
+                }
             }
         } else {
-            $model->loadDefaultValues();
+            $post->loadDefaultValues();
         }
 
         return $this->render('create', [
-            'model' => $model,
+            'post' => $post,
+            'page' => $page,
+            'postCategory' => $postCategory,
+            // 'postCategories' => $postCategories,
         ]);
     }
 
@@ -90,6 +109,9 @@ class PostController extends Controller
      */
     public function actionUpdate($id)
     {
+        // $page = new Page();
+        // $post = $this->findModel($id);
+        // $postCategory = new PostCategory();
         $model = $this->findModel($id);
 
         if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {

@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use app\models\PostCategory;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Post */
@@ -30,9 +31,24 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'category_id',
             'status_id',
             'author_id',
+            [
+                'label' => Yii::t('app', 'Категории'),
+                'value' => 33,
+            ],
+            [
+                'label' => 'RU',
+                'value' => $model->getPages()->where(['language_id' => 1])->one()['content'],
+            ],
+            [
+                'label' => 'KK',
+                'value' => '333',
+            ],
+            [
+                'label' => 'EN',
+                'value' => $model->getPages()->where(['language_id' => 3])->one()['content'],
+            ],
         ],
     ]) ?>
 

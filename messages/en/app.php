@@ -3,13 +3,15 @@
  * Translation map for en
  */
 return [
-    'Главная' => '',
-    'Контакты' => 'Contacts',
-    'Вход' => 'Login',
     'Войти' => 'Log In',
-    'Неверный логин или пароль' => 'Incorrect username or password',
+    'Вход' => 'Login',
+    'Главная' => '',
     'Запомнить меня' => 'Remember me',
     'Имя пользователя' => 'Username',
+    'Категории' => 'Categories',
+    'Контакты' => 'Contacts',
+    'Название' => 'Title',
+    'Неверный логин или пароль' => 'Incorrect username or password',
     'Пароль' => 'Password',
     'Сохранить' => '',
     'Статус' => 'Status',

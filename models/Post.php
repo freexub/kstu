@@ -8,13 +8,12 @@ use Yii;
  * This is the model class for table "post".
  *
  * @property int $id
- * @property int $category_id Категория
  * @property int $status_id Статус
  * @property int $author_id Автор
  *
  * @property User $author
- * @property Category $category
  * @property Page[] $pages
+ * @property Category[] $categories
  * @property Status $status
  */
 class Post extends \yii\db\ActiveRecord
@@ -33,9 +32,8 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['category_id', 'status_id', 'author_id'], 'required'],
-            [['category_id', 'status_id', 'author_id'], 'integer'],
-            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['category_id' => 'id']],
+            [['status_id', 'author_id'], 'required'],
+            [['status_id', 'author_id'], 'integer'],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::className(), 'targetAttribute' => ['author_id' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::className(), 'targetAttribute' => ['status_id' => 'id']],
         ];
@@ -48,7 +46,6 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             'id' => Yii::t('app', 'ID'),
-            'category_id' => Yii::t('app', 'Категория'),
             'status_id' => Yii::t('app', 'Статус'),
             'author_id' => Yii::t('app', 'Автор'),
         ];
@@ -65,16 +62,6 @@ class Post extends \yii\db\ActiveRecord
     }
 
     /**
-     * Gets query for [[Category]].
-     *
-     * @return \yii\db\ActiveQuery
-     */
-    public function getCategory()
-    {
-        return $this->hasOne(Category::className(), ['id' => 'category_id']);
-    }
-
-    /**
      * Gets query for [[Pages]].
      *
      * @return \yii\db\ActiveQuery
@@ -82,6 +69,16 @@ class Post extends \yii\db\ActiveRecord
     public function getPages()
     {
         return $this->hasMany(Page::className(), ['post_id' => 'id']);
+    }
+
+    /**
+     * Gets query for [[Categories]].
+     *
+     * @return \yii\db\ActiveQuery
+     */
+    public function getCategories()
+    {
+        return $this->hasMany(Category::className(), ['id' => 'category_id'])->viaTable('post_category', ['post_id' => 'id']);
     }
 
     /**

@@ -20,8 +20,6 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'category_id') ?>
-
     <?= $form->field($model, 'status_id') ?>
 
     <?= $form->field($model, 'author_id') ?>
