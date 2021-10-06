@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m211004_062057_create_table_post_category extends Migration
+class m211006_092816_create_table_post_category extends Migration
 {
     public function up()
     {
@@ -14,19 +14,20 @@ class m211004_062057_create_table_post_category extends Migration
         $this->createTable(
             '{{%post_category}}',
             [
-                'id_post' => $this->integer()->notNull(),
-                'id_category' => $this->integer()->notNull(),
+                'id' => $this->primaryKey(),
+                'post_id' => $this->integer()->notNull(),
+                'category_id' => $this->integer()->notNull(),
             ],
             $tableOptions
         );
 
-        $this->createIndex('id_post', '{{%post_category}}', ['id_post']);
-        $this->createIndex('id_category', '{{%post_category}}', ['id_category']);
+        $this->createIndex('category_id', '{{%post_category}}', ['category_id']);
+        $this->createIndex('post_id', '{{%post_category}}', ['post_id']);
 
         $this->addForeignKey(
             'post_category_ibfk_1',
             '{{%post_category}}',
-            ['id_post'],
+            ['post_id'],
             '{{%post}}',
             ['id'],
             'RESTRICT',
@@ -35,7 +36,7 @@ class m211004_062057_create_table_post_category extends Migration
         $this->addForeignKey(
             'post_category_ibfk_2',
             '{{%post_category}}',
-            ['id_category'],
+            ['category_id'],
             '{{%category}}',
             ['id'],
             'RESTRICT',

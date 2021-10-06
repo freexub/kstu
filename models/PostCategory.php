@@ -8,8 +8,8 @@ use Yii;
  * This is the model class for table "post_category".
  *
  * @property int $id
- * @property int $id_post
- * @property int $id_category
+ * @property int $post_id
+ * @property int $category_id
  *
  * @property Category $category
  * @property Post $post
@@ -30,10 +30,10 @@ class PostCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id_post', 'id_category'], 'required'],
-            [['id_post', 'id_category'], 'integer'],
-            [['id_post'], 'exist', 'skipOnError' => true, 'targetClass' => Post::className(), 'targetAttribute' => ['id_post' => 'id']],
-            [['id_category'], 'exist', 'skipOnError' => true, 'targetClass' => Category::className(), 'targetAttribute' => ['id_category' => 'id']],
+            [['post_id', 'category_id'], 'required'],
+            [['post_id', 'category_id'], 'integer'],
+            [['post_id'], 'exist', 'skipOnError' => true, 'targetClass' => Post::class, 'targetAttribute' => ['post_id' => 'id']],
+            [['category_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['category_id' => 'id']],
         ];
     }
 
@@ -43,9 +43,9 @@ class PostCategory extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
-            'id_post' => Yii::t('app', 'Id Post'),
-            'id_category' => Yii::t('app', 'Id Category'),
+            'id' => 'ID',
+            'post_id' => Yii::t('app', 'Post ID'),
+            'category_id' => Yii::t('app', 'Category ID'),
         ];
     }
 
@@ -56,7 +56,7 @@ class PostCategory extends \yii\db\ActiveRecord
      */
     public function getCategory()
     {
-        return $this->hasOne(Category::className(), ['id' => 'id_category']);
+        return $this->hasOne(Category::class, ['id' => 'category_id']);
     }
 
     /**
@@ -66,6 +66,6 @@ class PostCategory extends \yii\db\ActiveRecord
      */
     public function getPost()
     {
-        return $this->hasOne(Post::className(), ['id' => 'id_post']);
+        return $this->hasOne(Post::class, ['id' => 'post_id']);
     }
 }

@@ -51,6 +51,6 @@ class Status extends \yii\db\ActiveRecord
      */
     public function getPosts()
     {
-        return $this->hasMany(Post::className(), ['status_id' => 'id']);
+        return $this->hasMany(Post::class, ['status_id' => 'id']);
     }
 }

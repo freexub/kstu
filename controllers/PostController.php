@@ -74,18 +74,30 @@ class PostController extends Controller
         $post = new Post();
         $postCategory = new PostCategory();
 
-        $count = count(Yii::$app->request->post('PostCategory', []));
-        $postCategories = [new PostCategory()];
-        for($i = 1; $i < $count; $i++) {
-            $postCategories[] = new PostCategory();
-        }
-
         if ($this->request->isPost) {
+            $post->author_id = Yii::$app->user->id;
             if ($post->load($this->request->post()) && $post->save()) {
                 $page->post_id = $post->id;
                 $page->create_date = $page->update_date = date("Y-m-d H:i:s");
-                if ($page->load($this->request->post()) && $page->save()) {
-                    return '<pre>' . var_dump($postCategories) . '</pre>';
+
+                $count = count(Yii::$app->request->post('PostCategory')['category_id']);
+                $postCategories = [];
+                for ($i = 0; $i < $count; $i++) {
+                    $postCategories[] = new PostCategory();
+                    $postCategories[$i]->post_id = $post->id;
+                    $postCategories[$i]->category_id = Yii::$app->request->post('PostCategory')['category_id'][$i];
+                }
+
+                if ($page->load($this->request->post()) && $page->save() && PostCategory::validateMultiple($postCategories)) {
+                    // return $this->render('test', [
+                    //     'postCategories' => $postCategories,
+                    //     'postCategory' => Yii::$app->request->post('PostCategory')['category_id'],
+                    //     'count' => $count,
+                    // ]);
+                    foreach ($postCategories as $postCategory) {
+                        $postCategory->save();
+                    }
+                    return $this->redirect(['view', 'id' => $post->id]);
                 }
             }
         } else {
@@ -96,7 +108,6 @@ class PostController extends Controller
             'post' => $post,
             'page' => $page,
             'postCategory' => $postCategory,
-            // 'postCategories' => $postCategories,
         ]);
     }
 

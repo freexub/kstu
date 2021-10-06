@@ -26,13 +26,11 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= $form->field($post, 'status_id')->label(false)->hiddenInput(['value' => 1]) ?>
         
-        <?= $form->field($post, 'author_id')->label(false)->hiddenInput(['value' => Yii::$app->user->id]) ?>
-
         <?= $form->field($page, 'language_id')->label(false)->hiddenInput(['value' => ArrayHelper::getValue(Yii::$app->params["languageCodesInDatabase"], Yii::$app->language)]) ?>
 
         <?= $form->field($page, 'title')->textInput()->label(Yii::t('app', 'Название')) ?>
         
-        <?= $form->field($postCategory, 'id_category')->widget(Select2::classname(), [
+        <?= $form->field($postCategory, 'category_id')->widget(Select2::classname(), [
             'data' => Category::find()->select(['name', 'id'])->indexBy('id')->column(),
             'theme' => Select2::THEME_KRAJEE_BS4,
             'showToggleAll' => false,

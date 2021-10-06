@@ -27,6 +27,13 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) ?>
     </p>
 
+    <?php
+    $categories = [];
+    foreach ($model->getCategories()->asArray()->all() as $category) {
+        $categories[] = $category['name'];
+    }
+    ?>
+
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -35,7 +42,7 @@ $this->params['breadcrumbs'][] = $this->title;
             'author_id',
             [
                 'label' => Yii::t('app', 'Категории'),
-                'value' => 33,
+                'value' => implode(', ', $categories),
             ],
             [
                 'label' => 'RU',
@@ -43,7 +50,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'label' => 'KK',
-                'value' => '333',
+                'value' => $model->getPages()->where(['language_id' => 2])->one()['content'],
             ],
             [
                 'label' => 'EN',
