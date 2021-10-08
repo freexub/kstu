@@ -3,6 +3,7 @@
 namespace app\models;
 
 use Yii;
+use yii\helpers\ArrayHelper;
 
 /**
  * This is the model class for table "post".
@@ -19,6 +20,9 @@ use Yii;
  */
 class Post extends \yii\db\ActiveRecord
 {
+
+    public $category_ids;
+
     /**
      * {@inheritdoc}
      */
@@ -33,7 +37,7 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['status_id', 'author_id'], 'required'],
+            [['status_id', 'author_id', 'category_ids'], 'required'],
             [['status_id', 'author_id'], 'integer'],
             [['author_id'], 'exist', 'skipOnError' => true, 'targetClass' => User::class, 'targetAttribute' => ['author_id' => 'id']],
             [['status_id'], 'exist', 'skipOnError' => true, 'targetClass' => Status::class, 'targetAttribute' => ['status_id' => 'id']],
@@ -51,6 +55,30 @@ class Post extends \yii\db\ActiveRecord
             'author_id' => Yii::t('app', 'Автор'),
         ];
     }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        if ($insert) {
+            // Да это новая запись (insert)
+            foreach ($this->category_ids as $category_id) {
+                $category = Category::findOne($category_id);
+                $this->link('categories', $category);
+            }
+        } else {
+            // Нет, старая (update)
+            $postCategories = ArrayHelper::map($this->postCategories, 'category_id', 'category_id');
+            foreach (array_diff($this->category_ids, $postCategories) as $category_id) {
+                $category = Category::findOne($category_id);
+                $this->link('categories', $category);
+            }
+            foreach (array_diff($postCategories, $this->category_ids) as $category_id) {
+                $category = Category::findOne($category_id);
+                $this->unlink('categories', $category, true);
+            }
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
+
 
     /**
      * Gets query for [[Author]].

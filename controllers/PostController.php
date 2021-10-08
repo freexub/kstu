@@ -3,10 +3,9 @@
 namespace app\controllers;
 
 use Yii;
-use yii\base\Model;
+use yii\helpers\ArrayHelper;
 use app\models\Page;
 use app\models\Post;
-use app\models\PostCategory;
 use app\models\PostSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -72,33 +71,13 @@ class PostController extends Controller
     {
         $page = new Page();
         $post = new Post();
-        $postCategory = new PostCategory();
 
         if ($this->request->isPost) {
             $post->author_id = Yii::$app->user->id;
-            if ($post->load($this->request->post()) && $post->save()) {
-                $page->post_id = $post->id;
+            if ($post->load($this->request->post()) && $post->save() && $page->load($this->request->post())) {
                 $page->create_date = $page->update_date = date("Y-m-d H:i:s");
-
-                $count = count(Yii::$app->request->post('PostCategory')['category_id']);
-                $postCategories = [];
-                for ($i = 0; $i < $count; $i++) {
-                    $postCategories[] = new PostCategory();
-                    $postCategories[$i]->post_id = $post->id;
-                    $postCategories[$i]->category_id = Yii::$app->request->post('PostCategory')['category_id'][$i];
-                }
-
-                if ($page->load($this->request->post()) && $page->save() && PostCategory::validateMultiple($postCategories)) {
-                    // return $this->render('test', [
-                    //     'postCategories' => $postCategories,
-                    //     'postCategory' => Yii::$app->request->post('PostCategory')['category_id'],
-                    //     'count' => $count,
-                    // ]);
-                    foreach ($postCategories as $postCategory) {
-                        $postCategory->save();
-                    }
-                    return $this->redirect(['view', 'id' => $post->id]);
-                }
+                $page->link('post', $post);
+                return $this->redirect(['view', 'id' => $post->id]);
             }
         } else {
             $post->loadDefaultValues();
@@ -107,7 +86,6 @@ class PostController extends Controller
         return $this->render('create', [
             'post' => $post,
             'page' => $page,
-            'postCategory' => $postCategory,
         ]);
     }
 
@@ -120,17 +98,18 @@ class PostController extends Controller
      */
     public function actionUpdate($id)
     {
-        // $page = new Page();
-        // $post = $this->findModel($id);
-        // $postCategory = new PostCategory();
-        $model = $this->findModel($id);
+        $post = $this->findModel($id);
+        // $pages = $post->getPages();
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($this->request->isPost && $post->load($this->request->post()) && $post->save()) {
+            return $this->redirect(['view', 'id' => $post->id]);
+        } else {
+            $post->category_ids = ArrayHelper::map($post->categories, 'id', 'id');
         }
 
         return $this->render('update', [
-            'model' => $model,
+            'post' => $post,
+            // 'page' => $page,
         ]);
     }
 

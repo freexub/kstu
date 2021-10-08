@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?= $form->field($page, 'title')->textInput()->label(Yii::t('app', 'Название')) ?>
         
-        <?= $form->field($postCategory, 'category_id')->widget(Select2::classname(), [
+        <?= $form->field($post, 'category_ids')->widget(Select2::classname(), [
             'data' => Category::find()->select(['name', 'id'])->indexBy('id')->column(),
             'theme' => Select2::THEME_KRAJEE_BS4,
             'showToggleAll' => false,
