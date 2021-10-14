@@ -1,7 +1,7 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 use app\models\Category;
 use app\models\Status;
 use app\models\User;
@@ -21,9 +21,9 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
 
     <div class="post-form">
 
-        <?php $form = ActiveForm::begin(); ?>
+        <?php $form = ActiveForm::begin() ?>
 
-        <?= $form->field($post, 'category_ids')->widget(Select2::classname(), [
+        <?= $form->field($post, 'category_ids')->widget(Select2::class, [
             'data' => Category::find()->select(['name', 'id'])->indexBy('id')->column(),
             'theme' => Select2::THEME_KRAJEE_BS4,
             'showToggleAll' => false,
@@ -41,15 +41,16 @@ $this->params['breadcrumbs'][] = Yii::t('app', 'Update');
             Status::find()->select(['name', 'id'])->indexBy('id')->column()
             ) ?>
 
-        <?= $form->field($post, 'author_id')->dropdownList(
-            User::find()->select(['username', 'id'])->indexBy('id')->column()
-            ) ?>
+        <?= $form->field($post, 'author_id')->widget(Select2::class, [
+           'data' => User::find()->select(['username', 'id'])->indexBy('id')->column(),
+           'theme' => Select2::THEME_KRAJEE_BS4,
+        ])->label(Yii::t('app', 'Автор')) ?>
 
         <div class="form-group">
             <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'btn btn-success']) ?>
         </div>
 
-        <?php ActiveForm::end(); ?>
+        <?php ActiveForm::end() ?>
 
     </div>
 

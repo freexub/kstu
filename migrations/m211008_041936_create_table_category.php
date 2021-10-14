@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m211004_034326_create_table_language extends Migration
+class m211008_041936_create_table_category extends Migration
 {
     public function up()
     {
@@ -12,10 +12,10 @@ class m211004_034326_create_table_language extends Migration
         }
 
         $this->createTable(
-            '{{%language}}',
+            '{{%category}}',
             [
                 'id' => $this->primaryKey(),
-                'name' => $this->string(10)->notNull(),
+                'name' => $this->string(20)->notNull(),
             ],
             $tableOptions
         );
@@ -23,6 +23,6 @@ class m211004_034326_create_table_language extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%language}}');
+        $this->dropTable('{{%category}}');
     }
 }

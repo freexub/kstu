@@ -2,8 +2,9 @@
 
 use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\widgets\ActiveForm;
+use yii\bootstrap4\ActiveForm;
 use app\models\Category;
+use app\models\Language;
 use dosamigos\tinymce\TinyMce;
 use kartik\select2\Select2;
 
@@ -22,20 +23,26 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <div class="post-form">
 
-        <?php $form = ActiveForm::begin(); ?>
+        <?php $form = ActiveForm::begin() ?>
 
         <?= $form->field($post, 'status_id')->label(false)->hiddenInput(['value' => 1]) ?>
         
-        <?= $form->field($page, 'language_id')->label(false)->hiddenInput(['value' => ArrayHelper::getValue(Yii::$app->params["languageCodesInDatabase"], Yii::$app->language)]) ?>
-
         <?= $form->field($page, 'title')->textInput()->label(Yii::t('app', 'Название')) ?>
         
-        <?= $form->field($post, 'category_ids')->widget(Select2::classname(), [
+        <?= $form->field($page, 'language_id')->dropdownList(
+            Language::find()->select(['name', 'id'])->indexBy('id')->column(),
+            [
+                'options' => [
+                    ArrayHelper::getValue(Yii::$app->params["languageCodesInDatabase"], Yii::$app->language) => ['Selected' => true],
+                ],
+            ]
+        ); ?>
+
+        <?= $form->field($post, 'category_ids')->widget(Select2::class, [
             'data' => Category::find()->select(['name', 'id'])->indexBy('id')->column(),
             'theme' => Select2::THEME_KRAJEE_BS4,
             'showToggleAll' => false,
             'options' => [
-                'placeholder' => 'Выберите категории...',
                 'multiple' => true,
                 // 'autocomplete' => 'off',
             ],
@@ -44,8 +51,8 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ])->label(Yii::t('app', 'Категории')) ?>
 
-        <?= $form->field($page, 'content')->label(false)->widget(TinyMce::className(), [
-            'options' => ['rows' => 10],
+        <?= $form->field($page, 'content')->label(false)->widget(TinyMce::class, [
+            'options' => ['rows' => 15],
             'language' => Yii::$app->language,
             'clientOptions' => [
                 'plugins' => [
@@ -61,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'btn btn-success']) ?>
         </div>
 
-        <?php ActiveForm::end(); ?>
+        <?php ActiveForm::end() ?>
 
     </div>
 

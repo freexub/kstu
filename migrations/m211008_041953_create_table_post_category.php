@@ -2,7 +2,7 @@
 
 use yii\db\Migration;
 
-class m211004_061952_create_table_post extends Migration
+class m211008_041953_create_table_post_category extends Migration
 {
     public function up()
     {
@@ -12,29 +12,32 @@ class m211004_061952_create_table_post extends Migration
         }
 
         $this->createTable(
-            '{{%post}}',
+            '{{%post_category}}',
             [
                 'id' => $this->primaryKey(),
-                'status_id' => $this->integer()->notNull()->comment('Статус'),
-                'author_id' => $this->integer()->notNull()->comment('Автор'),
+                'post_id' => $this->integer()->notNull(),
+                'category_id' => $this->integer()->notNull(),
             ],
             $tableOptions
         );
 
+        $this->createIndex('category_id', '{{%post_category}}', ['category_id']);
+        $this->createIndex('post_id', '{{%post_category}}', ['post_id']);
+
         $this->addForeignKey(
-            'post_ibfk_1',
+            'post_category_ibfk_1',
+            '{{%post_category}}',
+            ['post_id'],
             '{{%post}}',
-            ['author_id'],
-            '{{%user}}',
             ['id'],
             'RESTRICT',
             'RESTRICT'
         );
         $this->addForeignKey(
-            'post_ibfk_2',
-            '{{%post}}',
-            ['status_id'],
-            '{{%status}}',
+            'post_category_ibfk_2',
+            '{{%post_category}}',
+            ['category_id'],
+            '{{%category}}',
             ['id'],
             'RESTRICT',
             'RESTRICT'
@@ -43,6 +46,6 @@ class m211004_061952_create_table_post extends Migration
 
     public function down()
     {
-        $this->dropTable('{{%post}}');
+        $this->dropTable('{{%post_category}}');
     }
 }

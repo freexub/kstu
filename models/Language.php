@@ -8,6 +8,7 @@ use Yii;
  * This is the model class for table "language".
  *
  * @property int $id
+ * @property string $code
  * @property string $name
  *
  * @property Page[] $pages
@@ -28,8 +29,9 @@ class Language extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['name'], 'required'],
-            [['name'], 'string', 'max' => 10],
+            [['code', 'name'], 'required'],
+            [['code'], 'string', 'max' => 2],
+            [['name'], 'string', 'max' => 20],
         ];
     }
 
@@ -40,6 +42,7 @@ class Language extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'code' => Yii::t('app', 'Код'),
             'name' => Yii::t('app', 'Язык'),
         ];
     }
