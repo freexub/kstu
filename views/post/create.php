@@ -25,7 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
         <?php $form = ActiveForm::begin() ?>
 
-        <?= $form->field($post, 'status_id')->label(false)->hiddenInput(['value' => 1]) ?>
+        <?= $form->field($post, 'status_id')->hiddenInput(['value' => 1])->label(false) ?>
         
         <?= $form->field($page, 'title')->textInput()->label(Yii::t('app', 'Название')) ?>
         
@@ -33,10 +33,10 @@ $this->params['breadcrumbs'][] = $this->title;
             Language::find()->select(['name', 'id'])->indexBy('id')->column(),
             [
                 'options' => [
-                    ArrayHelper::getValue(Yii::$app->params["languageCodesInDatabase"], Yii::$app->language) => ['Selected' => true],
+                    ArrayHelper::getValue(Yii::$app->params['languageCodesInDatabase'], Yii::$app->language) => ['Selected' => true],
                 ],
             ]
-        ); ?>
+        ) ?>
 
         <?= $form->field($post, 'category_ids')->widget(Select2::class, [
             'data' => Category::find()->select(['name', 'id'])->indexBy('id')->column(),
@@ -51,18 +51,74 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
         ])->label(Yii::t('app', 'Категории')) ?>
 
-        <?= $form->field($page, 'content')->label(false)->widget(TinyMce::class, [
-            'options' => ['rows' => 15],
+        <?= $form->field($page, 'content')->widget(TinyMce::class, [
+            'options' => ['rows' => 25],
             'language' => Yii::$app->language,
             'clientOptions' => [
                 'plugins' => [
-                    "advlist autolink lists link charmap print preview anchor",
-                    "searchreplace visualblocks code fullscreen",
-                    "insertdatetime media table contextmenu paste"
+                    'lists', // список
+                    'advlist',
+                    'link', // ссылка
+                    'autolink',
+                    'image',
+                    'imagetools',
+                    'code', // исходный код
+                    'codesample',
+                    'preview', // предпросмотр
+                    'charmap', // спецсимвол
+                    'print', // печать
+                    'fullscreen', // полноэкранный режим
+                    'anchor', // якорь
+                    'searchreplace', // поиск и замена
+                    'visualblocks',
+                    'paste',
+                    'contextmenu',
+                    'insertdatetime',
+                    'media',
+                    'table', // таблица
+                    'hr', // горизонтальная линия
+                    'directionality',
+                    'quickbars',
+                    'help', // помощь
+                    'nonbreaking', // неразрывный пробел
+                    // 'spellchecker', // проверка правописания
+                    // 'pagebreak', // разрыв страницы
+                    // 'autosave',
+                    // 'n1ed',
                 ],
-                'toolbar' => "undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+                // 'apiKey' => "5D47DFLT",
+                'toolbar' => 'undo redo | bold italic underline strikethrough | forecolor backcolor | fontselect fontsizeselect | fontsize | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link unlink image | gallery',
+                // 'images_upload_url' => 'upload',
+                // 'images_upload_base_path' => '/web/images/',
+                // 'images_file_types' => 'jpg,png,svg,webp,pdf',
+                // 'automatic_uploads' => false,
+                // 'relative_urls' => false,
+                // 'remove_script_host' => false,
+                'file_picker_callback' => alexantr\elfinder\TinyMCE::getFilePickerCallback(['elfinder/tinymce']),
+                'file_picker_types' => 'file image',
+                // 'images_upload_handler' => new JsExpression('mceElf.uploadHandler'),
+                // 'image_list' => [
+                //     [
+                //         'title' => 'My image 1',
+                //         'value' => 'https://www.example.com/my1.gif',
+                //     ],
+                //     [
+                //         'title' => 'My image 2',
+                //         'value' => 'http://www.moxiecode.com/my2.gif',
+                //     ],
+                // ],
+                'link_list' => [
+                    [
+                        'title' => '1',
+                        'value' => 'https://www.kstu.kz/',
+                    ],
+                    [
+                        'title' => '2',
+                        'value' => 'https://univer.kstu.kz/',
+                    ],
+                ],
             ]
-        ]);?>
+        ])->label(false) ?>
 
         <div class="form-group">
             <?= Html::submitButton(Yii::t('app', 'Сохранить'), ['class' => 'btn btn-success']) ?>

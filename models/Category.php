@@ -9,6 +9,11 @@ use Yii;
  *
  * @property int $id
  * @property string $name
+ * @property int|null $parent_id
+ * @property int $sort
+ * 
+ * @property Category[] $categories 
+ * @property Category $parent 
  * @property PostCategory[] $postCategories
  * @property Post[] $posts
  */
@@ -29,7 +34,10 @@ class Category extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
+            [['name', 'sort'], 'required'],
+            [['parent_id', 'sort'], 'integer'],
             [['name'], 'string', 'max' => 20],
+            [['parent_id'], 'exist', 'skipOnError' => true, 'targetClass' => Category::class, 'targetAttribute' => ['parent_id' => 'id']], 
         ];
     }
 
@@ -41,7 +49,29 @@ class Category extends \yii\db\ActiveRecord
         return [
             'id' => 'ID',
             'name' => Yii::t('app', 'Название'),
+            'parent_id' => Yii::t('app', 'Parent ID'),
+            'sort' => Yii::t('app', 'Sort'),
         ];
+    }
+
+	/** 
+     * Gets query for [[Categories]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */ 
+    public function getCategories() 
+    { 
+        return $this->hasMany(Category::class, ['parent_id' => 'id']); 
+    } 
+  
+    /** 
+     * Gets query for [[Parent]]. 
+     * 
+     * @return \yii\db\ActiveQuery 
+     */ 
+    public function getParent() 
+    { 
+        return $this->hasOne(Category::class, ['id' => 'parent_id']); 
     }
 
     /**

@@ -45,14 +45,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'label' => 'RU',
+                'format' => 'raw',
                 'value' => $model->getPages()->where(['language_id' => 1])->one()['content'],
             ],
             [
                 'label' => 'KK',
+                'format' => 'raw',
                 'value' => $model->getPages()->where(['language_id' => 2])->one()['content'],
             ],
             [
                 'label' => 'EN',
+                'format' => 'raw',
                 'value' => $model->getPages()->where(['language_id' => 3])->one()['content'],
             ],
         ],

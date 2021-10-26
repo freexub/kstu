@@ -10,12 +10,25 @@ use app\models\PostSearch;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use EdSDK\FlmngrServer\FlmngrServer;
 
 /**
  * PostController implements the CRUD actions for Post model.
  */
 class PostController extends Controller
 {
+    // /**
+    //  * @inheritdoc
+    //  */
+    // public function beforeAction($action)
+    // {            
+    //     if ($action->id == 'upload') {
+    //         $this->enableCsrfValidation = false;
+    //     }
+
+    //     return parent::beforeAction($action);
+    // }
+
     /**
      * @inheritDoc
      */
@@ -78,6 +91,11 @@ class PostController extends Controller
                 $page->create_date = $page->update_date = date("Y-m-d H:i:s");
                 $page->link('post', $post);
                 return $this->redirect(['view', 'id' => $post->id]);
+            } else {
+                return $this->render('test', [
+                    'post' => $post,
+                    'page' => $page,
+                ]);
             }
         } else {
             $post->loadDefaultValues();
@@ -125,6 +143,24 @@ class PostController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionConnector($cmd, $target, $init, $tree, $_)
+    {
+        return $this->render('connector', [
+            'cmd' => $cmd,
+            'target' => $target,
+            'init' => $init,
+            'tree' => $tree,
+            '_' => $_,
+        ]);
+    }
+
+    public function actionTest()
+    {
+        return $this->render('test', [
+            'id' => Yii::$app->user->id,
+        ]);
     }
 
     /**
