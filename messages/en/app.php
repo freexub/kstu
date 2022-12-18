@@ -5,6 +5,9 @@
 return [
     'Войти' => 'Log In',
     'Вход' => 'Login',
+
+    'Статьи' => 'Articles',
+
     'Главная' => '',
     'Запомнить меня' => 'Remember me',
     'Имя пользователя' => 'Username',
@@ -16,4 +19,7 @@ return [
     'Сохранить' => '',
     'Статус' => 'Status',
     'Язык' => 'Language',
+    'Журнал Карагандинского технического университета имени Абылкаса Сагинова' => 'Journal of Karaganda Technical University named after Abylkas Saginov',
+    'Укажите тему публикации на 3х языках' => 'Specify the topic of the paper in 3 languages',
+    'Подача статьи на публикацию в журнале' => 'Paper submission form',
 ];

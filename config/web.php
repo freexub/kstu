@@ -5,7 +5,7 @@ $db = require __DIR__ . '/db.php';
 
 $config = [
     'id' => 'basic',
-    'name' => 'KSTU',
+    'name' => 'Journal KSTU',
     'basePath' => dirname(__DIR__),
     'bootstrap' => ['log'],
     'language' => 'ru',
@@ -83,12 +83,18 @@ $config = [
                 'assignment' => [
                    'class' => 'mdm\admin\controllers\AssignmentController',
                    'userClassName' => 'app\models\User',
-                   'idField' => 'user_id',
+                   'idField' => 'id',
                    'usernameField' => 'username',
                 ],
             ],
             'layout' => 'left-menu',
             'mainLayout' => '@app/views/layouts/main.php',
+        ],
+        'authors' => [
+            'class' => 'app\modules\authors\Module',
+        ],
+        'cabinet' => [
+            'class' => 'app\modules\cabinet\Module',
         ],
     ],
     'as access' => [
@@ -98,6 +104,7 @@ $config = [
             'rbac/*',
             'gii/*',
             'post/*',
+            'authors/*',
             // The actions listed here will be allowed to everyone including guests.
             // So, 'admin/*' should not appear here in the production, of course.
             // But in the earlier stages of your development, you may probably want to

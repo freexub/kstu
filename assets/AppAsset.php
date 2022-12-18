@@ -23,7 +23,7 @@ class AppAsset extends AssetBundle
         'css/site.css',
         'css/animsition.min.css',
 //        'css/bootstrap.min.css',
-//        'css/unicons.css',
+        'css/unicons.css',
         'css/lighbox.min.css',
         'css/swiper.min.css',
         'css/style.css',
