@@ -4,9 +4,12 @@ namespace app\modules\authors\controllers;
 
 use app\models\Article;
 use app\models\ArticleSearch;
+use app\models\UploadForm;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\web\UploadedFile;
 use yii\filters\VerbFilter;
+use Yii;
 
 /**
  * ArticleController implements the CRUD actions for Article model.
@@ -40,6 +43,9 @@ class ArticleController extends Controller
     {
         $searchModel = new ArticleSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->andWhere([
+            'autor_id' => Yii::$app->user->id
+        ]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -55,9 +61,13 @@ class ArticleController extends Controller
      */
     public function actionView($id)
     {
-        return $this->render('view', [
-            'model' => $this->findModel($id),
-        ]);
+        if ($id == Yii::$app->user->id) {
+            return $this->render('view2', [
+                'model' => $this->findModel($id),
+            ]);
+        }
+
+        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
 
     /**
@@ -68,10 +78,36 @@ class ArticleController extends Controller
     public function actionCreate()
     {
         $model = new Article();
+        $check = new UploadForm();
+        $article = new UploadForm();
 
         if ($this->request->isPost) {
-            if ($model->load($this->request->post()) && $model->save()) {
-                return $this->redirect(['view', 'id' => $model->id]);
+            $article->file = UploadedFile::getInstance($model, 'documentFile');
+            $check->file = UploadedFile::getInstance($model, 'checkFile');
+
+            if ($model->load($this->request->post())) {
+
+                $date = date("d-m-Y_h-m-s");
+                $path = Yii::getAlias('@app') . '/runtime/uploads/';
+
+                if ($article->file && $article->validate()) {
+                    $article->file->saveAs($path.'article/' . $date. '_' .$article->file->baseName . '_article.' . $article->file->extension);
+                    $model->documentFile = $date. '_' . $article->file->baseName . '.' . $article->file->extension;
+                }
+
+                if ($check->file && $check->validate()) {
+                    $check->file->saveAs($path.'check/' . $date. '_' .$check->file->baseName . '_check.' . $check->file->extension);
+                    $model->checkFile =  $date. '_' . $check->file->baseName . '.' . $check->file->extension;
+                }
+
+                if ($model->save()){
+                    Yii::$app->session->setFlash('success', Yii::t('app_article', 'Ваша статья успешно загружена!'));
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }else{
+                    Yii::$app->session->setFlash('warning', "warning!!! warning!!! warning!!!");
+                    return $this->redirect(['create']);
+                }
+
             }
         } else {
             $model->loadDefaultValues();
@@ -80,6 +116,48 @@ class ArticleController extends Controller
         return $this->render('create', [
             'model' => $model,
         ]);
+    }
+
+    public function actionGetFile($id, $type = ''){
+        $model = $this->findModel($id);
+        if ($model->autor_id == Yii::$app->user->id){
+            $fileOnPath = '';
+            switch ($type){
+                case 'documentFile':
+                    $fileOnPath = 'article/' . $model->documentFile;
+                    break;
+                case 'documentShortFile':
+                    $fileOnPath = 'article_short/' . $model->documentShortFile;
+                    break;
+                case 'checkFile':
+                    $fileOnPath = 'check/' . $model->checkFile;
+                    break;
+                case 'reviewFile':
+                    $fileOnPath = 'review/' . $model->reviewFile;
+                    break;
+                case 'plagiatFile':
+                    $fileOnPath = 'antiplagiat/' . $model->plagiatFile;
+                    break;
+            }
+
+            $file = Yii::getAlias('@app') . '/runtime/uploads/'.$fileOnPath;
+            // проверка существования файла
+            if (file_exists($file)) {
+                // формирование заголовков, необходимых для скачивания файла
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename='.basename($file ));
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: '.filesize($file));
+
+                // чтение файла и отдача его на загрузку
+                readfile($file);
+            } else {
+                echo 'Файл не найден';
+            }
+        }
     }
 
     /**

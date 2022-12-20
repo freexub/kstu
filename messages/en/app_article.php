@@ -32,6 +32,8 @@ return [
     'Выбрать категорию ...' => 'Select category ...',
     'Прикрепите статью' => 'Upload paper',
     'Прикрепите чек оплаты' => 'Upload payment receipt',
+    'Статья' => 'Article',
+    'Чек оплаты' => 'Payment receipt',
 
     'Отправить статью' => 'Submit paper',
 ];

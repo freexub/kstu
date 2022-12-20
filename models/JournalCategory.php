@@ -63,7 +63,7 @@ class JournalCategory extends \yii\db\ActiveRecord
      */
     public function getJournal()
     {
-        return $this->hasOne(JournalNumber::class, ['id' => 'journal_id']);
+        return $this->hasOne(Journals::class, ['id' => 'journal_id']);
     }
 
     public function getAllCategory()
