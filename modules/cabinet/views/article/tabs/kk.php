@@ -1,6 +1,5 @@
 <?php
 
-use yii\helpers\Html;
 use yii\widgets\DetailView;
 
 /** @var yii\web\View $this */
@@ -18,6 +17,7 @@ use yii\widgets\DetailView;
             'annotation_kk:ntext',
             'keywords_kk:ntext',
         ],
+        'template' => "<tr><th style='width: 20%;'>{label}</th><td>{value}.</td></tr>"
     ]) ?>
 
 </div>

@@ -19,10 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= ($model->documentFile) ? Html::a(Yii::t('app_article', 'Скачать статью'), ['', 'id' => $model->id], ['class' => 'btn btn-success']) : Html::a(Yii::t('app_article', 'Скачать статью'), [], ['class' => 'btn btn-warning disabled'])?>
         <?= ($model->checkFile) ? Html::a(Yii::t('app_article', 'Скачать чек оплаты'), ['', 'id' => $model->id], ['class' => 'btn btn-primary']) : Html::a(Yii::t('app_article', 'Скачать чек оплаты'), ['', 'id' => $model->id], ['class' => 'btn btn-warning disabled']) ?>
-        <?= ($model->documentShortFile) ? Html::a(Yii::t('app_article', 'Скачать обрезанную стать.'), ['', 'id' => $model->id], ['class' => 'btn btn-primary']) : Html::a(Yii::t('app_article', 'Скачать чек оплаты'), ['', 'id' => $model->id], ['class' => 'btn btn-warning disabled']) ?>
-        <?= ($model->reviewFile) ? Html::a(Yii::t('app_article', 'рецензию'), ['', 'id' => $model->id], ['class' => 'btn btn-primary']) : '' ?>
-        <?= ($model->plagiatFile) ? Html::a(Yii::t('app_article', 'Отчет антиплагиат'), ['', 'id' => $model->id], ['class' => 'btn btn-primary']) : '' ?>
-        <?= ($model->plagiatFile) ? Html::a(Yii::t('app_article', 'Отчет антиплагиат'), ['', 'id' => $model->id], ['class' => 'btn btn-primary']) : '' ?>
+        <?= ($model->documentShortFile) ? Html::a(Yii::t('app_article', 'Скачать обрезанную стать'), ['', 'id' => $model->id], ['class' => 'btn btn-primary']) : Html::a(Yii::t('app_article', 'Скачать обрезанную стать'), ['', 'id' => $model->id], ['class' => 'btn btn-warning disabled']) ?>
+        <?= ($model->reviewFile) ? Html::a(Yii::t('app_article', 'рецензию'), ['', 'id' => $model->id], ['class' => 'btn btn-primary']) : Html::a(Yii::t('app_article', 'рецензию'), ['', 'id' => $model->id], ['class' => 'btn btn-danger disabled']) ?>
+        <?= ($model->plagiatFile) ? Html::a(Yii::t('app_article', 'Отчет антиплагиат'), ['', 'id' => $model->id], ['class' => 'btn btn-primary']) : Html::a(Yii::t('app_article', 'Отчет антиплагиат'), ['', 'id' => $model->id], ['class' => 'btn btn-warning disabled']) ?>
         <?php /*echo Html::a(Yii::t('app', 'Delete'), ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
@@ -32,25 +31,46 @@ $this->params['breadcrumbs'][] = $this->title;
         ]) */?>
     </p>
 
-    <?=Tabs::widget([
-        'items' => $items
-    ]);?>
-
-    <?=$this->render('tabs/'.$views, ['model' => $model]);?>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'autor.username',
-            'category.journal.title',
-            'category.title',
-            'comment:ntext',
-            'documentFile',
-            'checkFile',
+            [
+                'format' => 'raw',
+                'label' => Yii::t('app_article', 'Автор'),
+                'value' => function($data){
+                    return $data->autor->username;
+                }
+            ],
+            [
+                'label' => Yii::t('app_article', 'Журнал'),
+                'value' => function($data){
+                    return $data->category->journal->title;
+                }
+            ],
+            [
+                'label' => Yii::t('app_article', 'Категория журнала'),
+                'value' => function($data){
+                    return $data->category->title;
+                }
+            ],
+//            'comment:ntext',
             'date_create',
-            'date_update',
             'statuses',
         ],
+        'template' => "<tr><th style='width: 20%;'>{label}</th><td>{value}.</td></tr>"
     ]) ?>
+
+    <?=Tabs::widget([
+        'options' => [
+            'class' => 'nav-pills nav-justified',
+            'style' => 'margin-bottom: 5px',
+        ],
+        'items' => $items
+    ]);?>
+
+    <?= $this->render('tabs/'.$views, ['model' => $model]);?>
+
+    <?= $model->comment;?>
+
 
 </div>

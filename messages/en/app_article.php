@@ -3,6 +3,9 @@
  * Translation map for en
  */
 return [
+    'Автор' => 'Author',
+    'Автор' => 'Author',
+
     'Ваши публикации' => 'Your publications',
     'Подать статью' => 'Submit a paper',
     'Подача статьи на публикацию в журнале' => 'Paper submission form',
