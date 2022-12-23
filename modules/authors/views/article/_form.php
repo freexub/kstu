@@ -60,21 +60,35 @@ use kartik\file\FileInput;
                     <?=Yii::t('app_article', 'Дополнительная информация')?>
                 </div>
                 <div class="card-body">
+
+                    <?= $form->field($model, 'authorFullName')->textInput() ?>
+
                     <?= $form->field($model, 'category_id')
                         ->dropDownList(\yii\helpers\ArrayHelper::map(\app\models\JournalCategory::find()->all(), 'id', 'title_'.Yii::$app->language),
                             ['prompt' => Yii::t('app_article', 'Выбрать категорию ...')]) ?>
 
+                    <?= $form->field($model, 'authorOrganization')->textInput() ?>
+
+                    <?= $form->field($model, 'authorEmail')->textInput() ?>
+
+                    <?= $form->field($model, 'authorPhone')->textInput() ?>
+
                     <?= $form->field($model, 'documentFile')->widget(FileInput::classname(), [
-                        'options' => ['accept' => 'image/*'],
+//                        'options' => ['accept' => 'image/*'],
+                        'pluginOptions' => ['showPreview' => false,'showUpload' => false,]
+                    ]);?>
+
+                    <?= $form->field($model, 'authorsFile')->widget(FileInput::classname(), [
+//                        'options' => ['accept' => 'image/*'],
                         'pluginOptions' => ['showPreview' => false,'showUpload' => false,]
                     ]);?>
 
                     <?= $form->field($model, 'checkFile')->widget(FileInput::classname(), [
-                        'options' => ['accept' => 'image/*'],
+//                        'options' => ['accept' => 'excel/*'],
                         'pluginOptions' => ['showPreview' => false,'showUpload' => false,]
                     ]);?>
 
-                    <?= $form->field($model, 'comment')->textarea(['rows' => 5,'placeholder' => Yii::t('app_article', 'Комментарий для рецензента')])->label(false) ?>
+                    <?= $form->field($model, 'comment')->textarea(['rows' => 3,'placeholder' => Yii::t('app_article', 'Комментарий для рецензента')])->label(false) ?>
 
                 </div>
             </div>

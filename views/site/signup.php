@@ -5,6 +5,7 @@ use yii\bootstrap4\ActiveForm;
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
 /* @var $model \mdm\admin\models\form\Signup */
+/* @var $profile \app\models\Profile */
 
 //$this->title = Yii::t('rbac-admin', 'Signup');
 $this->title = 'Регистрация';
@@ -18,6 +19,9 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="row">
         <div class="col-lg-5">
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
+                <?= $form->field($profile, 'fullName_kk') ?>
+                <?= $form->field($profile, 'fullName_ru') ?>
+                <?= $form->field($profile, 'fullName_en') ?>
                 <?= $form->field($model, 'username') ?>
                 <?= $form->field($model, 'email') ?>
                 <?= $form->field($model, 'password')->passwordInput() ?>

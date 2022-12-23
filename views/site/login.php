@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 /* @var $this yii\web\View */
 /* @var $form yii\bootstrap\ActiveForm */
@@ -19,8 +19,8 @@ $this->params['breadcrumbs'][] = $this->title;
         'id' => 'login-form',
         'layout' => 'horizontal',
         'fieldConfig' => [
-            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-8\">{error}</div>",
-            'labelOptions' => ['class' => 'col-lg-1 control-label'],
+            'template' => "{label}\n<div class=\"col-lg-3\">{input}</div>\n<div class=\"col-lg-7\">{error}</div>",
+            'labelOptions' => ['class' => 'col-lg-2 control-label'],
         ],
     ]) ?>
 
@@ -32,8 +32,11 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'template' => "<div class=\"col-lg-offset-1 col-lg-3\">{input} {label}</div>\n<div class=\"col-lg-8\">{error}</div>",
         ]) ?>
 
+        <div class="col col-md-12">
+            <a href="signup"><?=Yii::t('app', 'Регистрация')?></a>
+        </div>
         <div class="form-group">
-            <div class="col-lg-offset-1 col-lg-11">
+            <div class="col col-lg-11">
                 <?= Html::submitButton(Yii::t('app', 'Войти'), ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
             </div>
         </div>

@@ -62,10 +62,10 @@ class ArticleController extends Controller
     public function actionView($id)
     {
         if ($id == Yii::$app->user->id) {
+        }
             return $this->render('view2', [
                 'model' => $this->findModel($id),
             ]);
-        }
 
         throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
     }
@@ -80,10 +80,12 @@ class ArticleController extends Controller
         $model = new Article();
         $check = new UploadForm();
         $article = new UploadForm();
+        $authors = new UploadForm();
 
         if ($this->request->isPost) {
             $article->file = UploadedFile::getInstance($model, 'documentFile');
             $check->file = UploadedFile::getInstance($model, 'checkFile');
+            $authors->file = UploadedFile::getInstance($model, 'authorsFile');
 
             if ($model->load($this->request->post())) {
 
@@ -100,10 +102,18 @@ class ArticleController extends Controller
                     $model->checkFile =  $date. '_' . $check->file->baseName . '.' . $check->file->extension;
                 }
 
+                if ($authors->file && $authors->validate()) {
+                    $authors->file->saveAs($path.'authors/' . $date. '_' .$authors->file->baseName . '_authors.' . $authors->file->extension);
+                    $model->authorsFile =  $date. '_' . $authors->file->baseName . '.' . $authors->file->extension;
+                }
+
+                $model->autor_id = Yii::$app->user->id;
+
                 if ($model->save()){
                     Yii::$app->session->setFlash('success', Yii::t('app_article', 'Ваша статья успешно загружена!'));
                     return $this->redirect(['view', 'id' => $model->id]);
                 }else{
+                    var_dump($model->errors);die();
                     Yii::$app->session->setFlash('warning', "warning!!! warning!!! warning!!!");
                     return $this->redirect(['create']);
                 }
@@ -138,6 +148,9 @@ class ArticleController extends Controller
                 case 'plagiatFile':
                     $fileOnPath = 'antiplagiat/' . $model->plagiatFile;
                     break;
+                case 'authorsFile':
+                    $fileOnPath = 'authors/' . $model->authorsFile;
+                    break;
             }
 
             $file = Yii::getAlias('@app') . '/runtime/uploads/'.$fileOnPath;
@@ -170,8 +183,38 @@ class ArticleController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $check = new UploadForm();
+        $article = new UploadForm();
+        $authors = new UploadForm();
 
-        if ($this->request->isPost && $model->load($this->request->post()) && $model->save()) {
+        if ($this->request->isPost && $model->load($this->request->post())) {
+            $article->file = UploadedFile::getInstance($model, 'documentFile');
+            $check->file = UploadedFile::getInstance($model, 'checkFile');
+            $authors->file = UploadedFile::getInstance($model, 'authorsFile');
+
+            $date = date("d-m-Y_h-m-s");
+            $path = Yii::getAlias('@app') . '/runtime/uploads/';
+
+            if ($article->file && $article->validate()) {
+                $article->file->saveAs($path.'article/' . $date. '_' .$article->file->baseName . '_article.' . $article->file->extension);
+                $model->documentFile = $date. '_' . $article->file->baseName . '.' . $article->file->extension;
+            }
+
+            if ($check->file && $check->validate()) {
+                $check->file->saveAs($path.'check/' . $date. '_' .$check->file->baseName . '_check.' . $check->file->extension);
+                $model->checkFile =  $date. '_' . $check->file->baseName . '.' . $check->file->extension;
+            }
+
+            if ($authors->file && $authors->validate()) {
+                $authors->file->saveAs($path.'authors/' . $date. '_' .$authors->file->baseName . '_authors.' . $authors->file->extension);
+                $model->authorsFile =  $date. '_' . $authors->file->baseName . '.' . $authors->file->extension;
+            }
+
+            $model->autor_id = Yii::$app->user->id;
+
+
+            $model->save();
+
             return $this->redirect(['view', 'id' => $model->id]);
         }
 

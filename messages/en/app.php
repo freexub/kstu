@@ -3,6 +3,17 @@
  * Translation map for en
  */
 return [
+    'Регистрация' => 'Sign up',
+    'ФИО на казахском языке' => 'Fullname in Kazakh',
+    'ФИО на русском языке' => 'Fullname in Russian',
+    'ФИО на английском языке' => 'Fullname in English',
+    'Email' => 'Email',
+    'Логин' => 'Login',
+    'Пароль' => 'Password',
+    'Нажимая кнопку Зарегистрироваться Вы подтверждаете' => 'By clicking the Sign up button you confirm',
+    'согласие на обработку персональных данных' => 'accept the processing of personal data',
+    'Зарегистрироваться' => 'Submit the registration',
+
     'Войти' => 'Log In',
     'Вход' => 'Login',
 

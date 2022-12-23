@@ -68,15 +68,23 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col col-6">
-                            <?= Html::a(Yii::t('app', 'Статья'), ['get-file', 'id' => $model->id, 'type'=>'documentFile'], ['class' => 'btn btn-success btn-block']) ?>
+                        <div class="col col-4">
+                            <?= Html::a(Yii::t('app', 'Статья'), ['get-file', 'id' => $model->id, 'type'=>'documentFile'], ['class' => 'btn btn-primary btn-block']) ?>
                         </div>
-                        <div class="col col-6">
-                            <?= Html::a(Yii::t('app', 'Чек оплаты'), ['get-file', 'id' => $model->id, 'type'=>'checkFile'], ['class' => 'btn btn-success btn-block']) ?>
+                        <div class="col col-4">
+                            <?= Html::a(Yii::t('app', 'Чек оплаты'), ['get-file', 'id' => $model->id, 'type'=>'checkFile'], ['class' => 'btn btn-primary btn-block']) ?>
+                        </div>
+                        <div class="col col-4">
+                            <?= Html::a(Yii::t('app', 'Список авторов'), ['get-file', 'id' => $model->id, 'type'=>'authorsFile'], ['class' => 'btn btn-primary btn-block']) ?>
                         </div>
                     </div>
 
                     <br>
+
+                    <?= $form->field($model, 'authorFullName')->textInput(['disabled' => true]) ?>
+                    <?= $form->field($model, 'authorOrganization')->textInput(['disabled' => true]) ?>
+                    <?= $form->field($model, 'authorEmail')->textInput(['disabled' => true]) ?>
+                    <?= $form->field($model, 'authorPhone')->textInput(['disabled' => true]) ?>
 
                     <?= $form->field($model, 'category_id')
                         ->dropDownList(\yii\helpers\ArrayHelper::map(\app\models\JournalCategory::find()->all(), 'id', 'title_'.Yii::$app->language),
