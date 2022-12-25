@@ -132,13 +132,17 @@ class Article extends \yii\db\ActiveRecord
     }
 
     public function getStatuses(){
-        switch ($this->status){
-            case 0:
-                return 'На проверке РИО';
-            case 1:
-                return 'На проверке Антиплагиат';
-            case 2:
-                return 'На проверке Рецензент';
-        }
+        return $this->hasOne(JournalStatuses::class, ['id' => 'status']);
     }
+
+//    public function getStatuses(){
+//        switch ($this->status){
+//            case 0:
+//                return 'На проверке РИО';
+//            case 1:
+//                return 'На проверке Антиплагиат';
+//            case 2:
+//                return 'На проверке Рецензент';
+//        }
+//    }
 }

@@ -5,12 +5,12 @@ use yii\helpers\Html;
 /** @var yii\web\View $this */
 /** @var app\models\Article $model */
 
-$this->title = Yii::t('app', 'Update Article: {name}', [
+$this->title = Yii::t('app', 'Редактирование', [
     'name' => $model->id,
 ]);
-$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Articles'), 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = Yii::t('app', 'Update');
+$this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Статьи'), 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => $model->getTitle(), 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = Yii::t('app', 'Редактирование');
 ?>
 <div class="article-update">
 

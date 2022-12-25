@@ -18,6 +18,7 @@ use yii\widgets\DetailView;
             'annotation_en:ntext',
             'keywords_en:ntext',
         ],
+        'template' => "<tr><th style='width: 30%;'>{label}</th><td>{value}.</td></tr>"
     ]) ?>
 
 </div>

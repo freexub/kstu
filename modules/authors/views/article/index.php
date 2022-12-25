@@ -31,7 +31,15 @@ $this->params['breadcrumbs'][] = $this->title;
 
 //            'id',
 //            'autor_id',
-            'title_'.Yii::$app->language.':ntext',
+//            'title_'.Yii::$app->language.':ntext',
+            [
+                'attribute' => 'title_ru',
+                'format' => 'raw',
+                'value' => function($data){
+                    return '<p class="mb-0">'.$data->title_ru.'</p><span class="badge badge-info">'.$data->date_create.'</span>';
+                }
+            ],
+            'statuses.name_'.Yii::$app->language,
 //            'title_kz:ntext',
 //            'title_en:ntext',
             //'keywords_ru:ntext',
@@ -44,9 +52,8 @@ $this->params['breadcrumbs'][] = $this->title;
             //'comment:ntext',
             //'documentFile',
             //'checkFIle',
-            'date_create',
+//            'date_create',
             //'date_update',
-            'status',
             [
                 'class' => ActionColumn::className(),
                 'urlCreator' => function ($action, Article $model, $key, $index, $column) {

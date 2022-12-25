@@ -45,6 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'date_update',
             'statuses',
         ],
+        'template' => "<tr><th style='width: 30%;'>{label}</th><td>{value}.</td></tr>"
     ]) ?>
     <?=Tabs::widget([
         'items' => $items
