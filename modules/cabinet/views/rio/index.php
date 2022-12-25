@@ -43,16 +43,9 @@ $this->params['breadcrumbs'][] = $this->title;
 //                    'class' => 'pb-10',
                 ],
                 'value'=> function($data){
-                    $status = '';
-                    if ($data->status == 0)
-                        $status = 'На проверке РИО';
-                    if ($data->status == 1)
-                        $status = 'На проверке Антиплагиат';
-                    if ($data->status == 2)
-                        $status = 'На проверке Рецензент';
-
-                    return $status;
-                }
+                    return $data->statuses->name_ru;
+                },
+                'filter' => false
             ],
             [
 //                'attribute' => 'status',

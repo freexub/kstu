@@ -83,8 +83,8 @@ use kartik\file\FileInput;
                         'pluginOptions' => ['showPreview' => false,'showUpload' => false,]
                     ]);?>
 
-                    <?= $form->field($model, 'checkFile')->widget(FileInput::classname(), [
-//                        'options' => ['accept' => 'excel/*'],
+                    <?= $form->field($model, 'documentShortFile')->widget(FileInput::classname(), [
+                        'options' => ['accept' => 'excel/*'],
                         'pluginOptions' => ['showPreview' => false,'showUpload' => false,]
                     ]);?>
 

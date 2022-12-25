@@ -21,6 +21,7 @@ use Yii;
  * @property string $annotation_en
  * @property int $category_id
  * @property string|null $comment
+ * @property string|null $commentJournal
  * @property string $documentFile
  * @property string|null $documentShortFile
  * @property string $checkFile
@@ -47,6 +48,8 @@ class Article extends \yii\db\ActiveRecord
         return 'journal_article';
     }
 
+    public $stat;
+
     /**
      * {@inheritdoc}
      */
@@ -55,7 +58,7 @@ class Article extends \yii\db\ActiveRecord
         return [
             [['autor_id', 'title_ru', 'title_kk', 'title_en', 'keywords_ru', 'keywords_kk', 'keywords_en', 'annotation_ru', 'annotation_kk', 'annotation_en', 'category_id', 'documentFile', 'checkFile', 'authorFullName', 'authorsFile', 'authorOrganization', 'authorEmail', 'authorPhone'], 'required'],
             [['autor_id', 'parent_id', 'category_id', 'plagiatPoint', 'status'], 'integer'],
-            [['title_ru', 'title_kk', 'title_en', 'keywords_ru', 'keywords_kk', 'keywords_en', 'annotation_ru', 'annotation_kk', 'annotation_en', 'comment'], 'string'],
+            [['title_ru', 'title_kk', 'title_en', 'keywords_ru', 'keywords_kk', 'keywords_en', 'annotation_ru', 'annotation_kk', 'annotation_en', 'comment', 'commentJournal'], 'string'],
             [['date_create', 'date_update'], 'safe'],
             [['documentFile', 'documentShortFile', 'checkFile', 'reviewFile', 'plagiatFile', 'doi', 'authorsFile', 'authorEmail'], 'string', 'max' => 100],
             [['authorFullName'], 'string', 'max' => 150],
@@ -84,6 +87,7 @@ class Article extends \yii\db\ActiveRecord
             'annotation_en' => Yii::t('app_article', 'Аннотация на английском языке'),
             'category_id' => Yii::t('app_article', 'Категория'),
             'comment' => Yii::t('app_article', 'Комментарий для рецензента'),
+            'commentJournal' => Yii::t('app_article', 'Комментарий проверяющего'),
             'documentFile' => Yii::t('app_article', 'Прикрепите статью'),
             'checkFile' => Yii::t('app_article', 'Прикрепите чек оплаты'),
             'documentShortFile' => Yii::t('app_article', 'Обрезанная статья'),
@@ -99,6 +103,7 @@ class Article extends \yii\db\ActiveRecord
             'authorOrganization' => Yii::t('app', 'Организация'),
             'authorEmail' => Yii::t('app', 'E-mail'),
             'authorPhone' => Yii::t('app', 'Телефон'),
+            'stat' => Yii::t('app', 'Статус'),
         ];
     }
 //

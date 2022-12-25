@@ -77,6 +77,7 @@ class ArticleController extends Controller
      */
     public function actionCreate()
     {
+        $userId = Yii::$app->user->id;
         $model = new Article();
         $check = new UploadForm();
         $article = new UploadForm();
@@ -93,18 +94,18 @@ class ArticleController extends Controller
                 $path = Yii::getAlias('@app') . '/runtime/uploads/';
 
                 if ($article->file && $article->validate()) {
-                    $article->file->saveAs($path.'article/' . $date. '_' .$article->file->baseName . '_article.' . $article->file->extension);
-                    $model->documentFile = $date. '_' . $article->file->baseName . '.' . $article->file->extension;
+                    $article->file->saveAs($path.'article/' . $date. '_' . $userId . '_article' . $article->file->extension);
+                    $model->documentFile = $date. '_' . $userId . '_article' . '.' . $article->file->extension;
                 }
 
                 if ($check->file && $check->validate()) {
-                    $check->file->saveAs($path.'check/' . $date. '_' .$check->file->baseName . '_check.' . $check->file->extension);
-                    $model->checkFile =  $date. '_' . $check->file->baseName . '.' . $check->file->extension;
+                    $check->file->saveAs($path.'check/' . $date. '_' . $userId . '_check' . $check->file->extension);
+                    $model->checkFile =  $date. '_' . $userId . '_check'  . '.' . $check->file->extension;
                 }
 
                 if ($authors->file && $authors->validate()) {
-                    $authors->file->saveAs($path.'authors/' . $date. '_' .$authors->file->baseName . '_authors.' . $authors->file->extension);
-                    $model->authorsFile =  $date. '_' . $authors->file->baseName . '.' . $authors->file->extension;
+                    $authors->file->saveAs($path.'authors/' . $date. '_' . $userId . '_authors' . $authors->file->extension);
+                    $model->authorsFile =  $date. '_' . $userId . '_authors' . '.' . $authors->file->extension;
                 }
 
                 $model->autor_id = Yii::$app->user->id;
@@ -182,6 +183,7 @@ class ArticleController extends Controller
      */
     public function actionUpdate($id)
     {
+        $userId = Yii::$app->user->id;
         $model = $this->findModel($id);
         $check = new UploadForm();
         $article = new UploadForm();
@@ -192,25 +194,37 @@ class ArticleController extends Controller
             $check->file = UploadedFile::getInstance($model, 'checkFile');
             $authors->file = UploadedFile::getInstance($model, 'authorsFile');
 
+
             $date = date("d-m-Y_h-m-s");
             $path = Yii::getAlias('@app') . '/runtime/uploads/';
 
             if ($article->file && $article->validate()) {
-                $article->file->saveAs($path.'article/' . $date. '_' .$article->file->baseName . '_article.' . $article->file->extension);
-                $model->documentFile = $date. '_' . $article->file->baseName . '.' . $article->file->extension;
+                $article->file->saveAs($path.'article/' . $date. '_' . $userId . '_article.' . $article->file->extension);
+                $model->documentFile = $date. '_' . $userId . '_article.' . '.' . $article->file->extension;
             }
 
             if ($check->file && $check->validate()) {
-                $check->file->saveAs($path.'check/' . $date. '_' .$check->file->baseName . '_check.' . $check->file->extension);
-                $model->checkFile =  $date. '_' . $check->file->baseName . '.' . $check->file->extension;
+                $check->file->saveAs($path.'check/' . $date. '_' . $userId . '_check.' . $check->file->extension);
+                $model->checkFile =  $date. '_' . $userId . '_check.'  . '.' . $check->file->extension;
             }
 
             if ($authors->file && $authors->validate()) {
-                $authors->file->saveAs($path.'authors/' . $date. '_' .$authors->file->baseName . '_authors.' . $authors->file->extension);
-                $model->authorsFile =  $date. '_' . $authors->file->baseName . '.' . $authors->file->extension;
+                $authors->file->saveAs($path.'authors/' . $date. '_' . $userId . '_authors.' . $authors->file->extension);
+                $model->authorsFile =  $date. '_' . $userId . '_authors.' . '.' . $authors->file->extension;
             }
 
             $model->autor_id = Yii::$app->user->id;
+
+            if ($model->save()){
+                Yii::$app->session->setFlash('success', Yii::t('app_article', 'Ваша статья успешно загружена!'));
+                return $this->redirect(['view', 'id' => $model->id]);
+            }else{
+                var_dump($model->errors);die();
+                Yii::$app->session->setFlash('warning', "warning!!! warning!!! warning!!!");
+                return $this->redirect(['create']);
+            }
+
+            $model->autor_id = $user_id;
 
 
             $model->save();
