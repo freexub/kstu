@@ -53,6 +53,12 @@ class Article extends Articles
                 case 'authorsFile':
                     $fileOnPath = 'authors/' . $this->authorsFile;
                     break;
+                case 'reviewTemplate':
+                    $fileOnPath = 'files/review_template.docx';
+                    break;
+                case 'authorsTemplate':
+                    $fileOnPath = 'files/authors_template.xlsx';
+                    break;
             }
 
             $file = Yii::getAlias('@app') . '/runtime/uploads/'.$fileOnPath;

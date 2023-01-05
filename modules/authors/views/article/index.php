@@ -28,38 +28,42 @@ $this->params['breadcrumbs'][] = $this->title;
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-//            'id',
-//            'autor_id',
-//            'title_'.Yii::$app->language.':ntext',
             [
                 'attribute' => 'title_ru',
                 'format' => 'raw',
                 'value' => function($data){
-                    return '<p class="mb-0">'.$data->title_ru.'</p><span class="badge badge-info">'.$data->date_create.'</span>';
+                    if ($data->status == 1)
+                        return '<p class="mb-0"><a href="view?id='.$data->id.'">'.$data->title_ru.'</a></p><span class="badge badge-info">'.$data->statuses->title.'</span>';
+                    elseif(($data->status == 2))
+                        return '<p class="mb-0"><a href="update?id='.$data->id.'">'.$data->title_ru.'</a></p><span class="badge badge-info">'.$data->statuses->title.'</span>';
+                    else
+                        return '<p class="mb-0">'.$data->title_ru.'</p><span class="badge badge-info">'.$data->statuses->title.'</span>';
                 }
             ],
-            'statuses.name_'.Yii::$app->language,
-//            'title_kz:ntext',
-//            'title_en:ntext',
-            //'keywords_ru:ntext',
-            //'keywords_kz:ntext',
-            //'keywords_en:ntext',
-            //'annotation_ru:ntext',
-            //'annotation_kz:ntext',
-            //'annotation_en:ntext',
-            //'category_id',
-            //'comment:ntext',
-            //'documentFile',
-            //'checkFIle',
-//            'date_create',
-            //'date_update',
             [
-                'class' => ActionColumn::className(),
-                'urlCreator' => function ($action, Article $model, $key, $index, $column) {
-                    return Url::toRoute([$action, 'id' => $model->id]);
-                 }
+                'value' => Yii::t('app', 'Удалить'),
+                'format' => 'raw',
+                'value' => function($data){
+                    if ($data->status < 3){
+                        return Html::a(Yii::t('app', 'Удалить'), ['delete', 'id' => $data->id], [
+                            'class' => 'btn btn-danger btn-block',
+                            'data' => [
+                                'confirm' => Yii::t('app_article', 'Вы уверены, что хотите удалить этот элемент?'),
+                                'method' => 'post',
+                            ],
+                        ]);
+                    }else{
+                        return '<h3><span class="btn btn-danger btn-block disabled">'.Yii::t('app', 'Удалить').'</span></h3>';
+                    }
+                }
             ],
+//            'statuses.name_'.Yii::$app->language,
+//            [
+//                'class' => ActionColumn::className(),
+//                'urlCreator' => function ($action, Article $model, $key, $index, $column) {
+//                    return Url::toRoute([$action, 'id' => $model->id]);
+//                 }
+//            ],
         ],
     ]); ?>
 

@@ -9,7 +9,7 @@ use kartik\file\FileInput;
 /** @var yii\web\View $this */
 /** @var app\modules\cabinet\models\Article $model */
 
-$this->title = $model->title;
+$this->title = $model->title_ru;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Статьи'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
@@ -36,8 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <p>
         <?= ($model->documentFile) ? Html::a(Yii::t('app_article', 'Статья'), ['file', 'id' => $model->id, 'type' => 'documentFile'], ['class' => 'btn btn-info']) : Html::a(Yii::t('app_article', 'Статья'), [], ['class' => 'btn btn-warning disabled'])?>
         <?= ($model->authorsFile) ? Html::a(Yii::t('app_article', 'Список авторов'), ['file', 'id' => $model->id, 'type' => 'authorsFile'], ['class' => 'btn btn-info']) : Html::a(Yii::t('app_article', 'Список авторов'), [], ['class' => 'btn btn-warning disabled'])  ?>
-        <?= ($model->checkFile) ? Html::a(Yii::t('app_article', 'Чек оплаты'), ['file', 'id' => $model->id, 'type' => 'checkFile'], ['class' => 'btn btn-info']) : Html::a(Yii::t('app_article', 'Чек оплаты'), [], ['class' => 'btn btn-warning disabled']) ?>
-        <?= ($model->documentShortFile) ? Html::a(Yii::t('app_article', 'Обрезанная статья'), ['file', 'id' => $model->id, 'type' => 'documentShortFile'], ['class' => 'btn btn-primary']) : Html::a(Yii::t('app_article', 'Обрезанная статья'), [], ['class' => 'btn btn-warning disabled']) ?>
+       <?= ($model->documentShortFile) ? Html::a(Yii::t('app_article', 'Обрезанная статья'), ['file', 'id' => $model->id, 'type' => 'documentShortFile'], ['class' => 'btn btn-primary']) : Html::a(Yii::t('app_article', 'Обрезанная статья'), [], ['class' => 'btn btn-warning disabled']) ?>
         <?= ($model->plagiatFile) ? Html::a(Yii::t('app_article', 'Отчет антиплагиат'), ['file', 'id' => $model->id, 'type' => 'plagiatFile'], ['class' => 'btn btn-primary']) : '' ?>
         <?= ($model->reviewFile) ? Html::a(Yii::t('app_article', 'Рецензия'), ['file', 'id' => $model->id, 'type' => 'reviewFile'], ['class' => 'btn btn-primary']) : '' ?>
 
@@ -53,14 +52,20 @@ $this->params['breadcrumbs'][] = $this->title;
 //            'documentFile',
 //            'checkFile',
             'statuses.name_'.Yii::$app->language,
-            'date_create',
+//            'date_create',
+            [
+                'attribute' => 'date_create',
+                'value' => function($data){
+                    return Yii::$app->formatter->asDate($data->date_create, 'dd.MM.yyyy');
+                }
+            ],
 //            'date_update',
         ],
         'template' => "<tr><th style='width: 30%;'>{label}</th><td>{value}.</td></tr>"
     ]) ?>
-    <?=Tabs::widget([
+    <?php /*echoTabs::widget([
         'items' => $items
-    ]);?>
+    ]);*/?>
 
     <?=$this->render('tabs/'.$views, ['model' => $model]);?>
 
@@ -70,10 +75,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'data-target'=>'#myModal',
     ]) ?>
 
-    <?php echo Html::a(Yii::t('app', 'Удалить статью'), ['delete', 'id' => $model->id], [
+    <?php echo Html::a(Yii::t('app_article', 'Удалить статью'), ['delete', 'id' => $model->id], [
         'class' => 'btn btn-danger float-right',
         'data' => [
-            'confirm' => Yii::t('app', 'Are you sure you want to delete this item?'),
+            'confirm' => Yii::t('app_article', 'Вы уверены, что хотите удалить этот элемент?'),
             'method' => 'post',
         ],
     ]) ?>

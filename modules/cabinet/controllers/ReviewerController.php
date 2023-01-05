@@ -14,7 +14,7 @@ use Yii;
 /**
  * ArticleController implements the CRUD actions for Article model.
  */
-class RioController extends Controller
+class ReviewerController extends Controller
 {
     /**
      * @inheritDoc
@@ -43,6 +43,8 @@ class RioController extends Controller
     {
         $searchModel = new ArticleSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->andWhere(['reviewUser' => Yii::$app->user->id]);
+        $dataProvider->query->andWhere(['status'=>7]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -59,28 +61,39 @@ class RioController extends Controller
     public function actionView($id, $tab=0)
     {
         $model = $this->findModel($id);
-        $shortFile = $model->documentShortFile;
+        $review = $model->reviewFile;
         $date = date("d-m-Y_h-m-s");
-        $path = Yii::getAlias('@app') . '/runtime/uploads/article_short/';
+        $path = Yii::getAlias('@app') . '/runtime/uploads/review/';
 
 //            var_dump($shortFile);die();
         if ($model->load($this->request->post())){
-            $userId = $model->autor_id;
-            if (!empty($_FILES['Article']['name']['documentShortFile'])){
-                $documentShortFile = new UploadForm();
-                $documentShortFile->file = UploadedFile::getInstance($model, 'documentShortFile');
+            $userId = $model->reviewUser;
+            if (!empty($_FILES['Article']['name']['reviewFile'])){
+                $reviewFile = new UploadForm();
+                $reviewFile->file = UploadedFile::getInstance($model, 'reviewFile');
 
-                if (!empty($shortFile)){
-                    var_dump($shortFile);die();
-                    if (file_exists($path.$shortFile))
-                        unlink('/runtime/uploads/article_short/'.$shortFile);
+                if (!empty($review)){
+                    if (file_exists($path.$review))
+                        unlink($path.$review);
                 }
-                if ($documentShortFile->file && $documentShortFile->validate()) {
-                    $model->documentShortFile = $date . '_' . $userId . '_articleShort.' . $documentShortFile->file->extension;
-                    $documentShortFile->file->saveAs($path . $model->documentShortFile);
+                if ($reviewFile->file && $reviewFile->validate()) {
+                    $model->reviewFile = $date . '_' . $userId . '_review.' . $reviewFile->file->extension;
+                    $reviewFile->file->saveAs($path . $model->reviewFile);
                 }
             }else{
-                $model->documentShortFile = $shortFile;
+                $model->reviewFile = $review;
+            }
+//            var_dump($_POST);die();
+            switch ($_POST["Article"]["stat"]){
+                case '1':
+                    $model->status = 9;
+                    break;
+                case '2':
+                    $model->status = 12;
+                    break;
+                case '3':
+                    $model->status = 8;
+                    break;
             }
 
             if ($model->save()){
@@ -114,23 +127,13 @@ class RioController extends Controller
         ]);
     }
 
-    public function actionFile($id, $type){
-       $model = $this->findModel($id);
-       $model->getArticleFile($type);
-    }
+    public function actionFile($id=0, $type){
+        if ($id == 0)
+            $model = new Article();
+        else
+            $model = $this->findModel($id);
 
-    /**
-     * Deletes an existing Article model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $model = $this->findModel($id);
-        $model->satus = 100;
-        return $this->redirect(['index']);
+        $model->getArticleFile($type);
     }
 
     /**

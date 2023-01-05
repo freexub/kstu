@@ -31,6 +31,8 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <?php $this->beginBody() ?>
 
 <header id="header">
+
+    <?php $controller = Yii::$app->controller->id; ?>
     <?php
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
@@ -59,28 +61,34 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 ['label' => Yii::t('app', 'Контакты'), 'url' => ['#']],
             ]],
             ['label' => Yii::t('app', 'Поиск'), 'url' => ['/site/about']],
+            ['label' => Yii::t('app', 'Подать статью'), 'linkOptions' => ['class' => 'btn btn-success', 'style'=>'color:#fff'],  'url' => ['/authors/article/create']],
         ]
     ]);
 
     echo Nav::widget([
-        'options' => ['class' => 'navbar-nav ml-auto'],
-        'items' => [
-            Yii::$app->user->isGuest
-                ? ['label' => 'Login', 'url' => ['/site/login']]
-                : '<li class="nav-item float-left">'
-                . Html::beginForm(['/site/logout'])
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'nav-link btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-        ]
-    ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav '],
+        'options' => ['class' => 'navbar-nav  ml-auto'],
         'items' => [
             MultiLang::widget()
+        ]
+    ]);
+
+    echo Nav::widget([
+        'options' => ['class' => 'navbar-nav'],
+        'items' => [
+            ['label' => Yii::$app->user->identity->username, 'visible'=>!Yii::$app->user->isGuest, 'items' => [
+                ['label' => Yii::t('app', 'Список статей РИО'), 'active'=> $controller == 'rio', 'visible'=>Yii::$app->user->can('РИО'), 'url' => ['/cabinet/rio/index']],
+                ['label' => Yii::t('app', 'Список статей Антиплагиат'), 'active'=> $controller == 'antiplagiat', 'visible'=>Yii::$app->user->can('Антиплагиат'), 'url' => ['/cabinet/antiplagiat/index']],
+                ['label' => Yii::t('app', 'Список статей Редколлегия'), 'active'=> $controller == 'editorial', 'visible'=>Yii::$app->user->can('Редколлегия'), 'url' => ['/cabinet/editorial/index']],
+                ['label' => Yii::t('app', 'Список статей Рецензент'), 'active'=> $controller == 'reviewer', 'visible'=>Yii::$app->user->can('Рецензент'), 'url' => ['/cabinet/reviewer/index']],
+
+                ['label' => Yii::t('app', 'Список моих статей'), 'active'=> $controller == 'article', 'visible'=>Yii::$app->user->can('Автор'), 'url' => ['/authors/article/index']],
+
+                '<div class="dropdown-divider"></div>',
+                ['label' => Yii::t('app', 'Список пользователей'), 'active'=> $controller == 'profile', 'visible'=>Yii::$app->user->can('РИО'), 'url' => ['/cabinet/profile/index']],
+                '<div class="dropdown-divider"></div>',
+                ['label' => Yii::t('app', 'Выход'), 'visible'=>!Yii::$app->user->isGuest, 'url' => ['/site/logout'], 'class' => 'glyphicon glyphicon-arrow-left'],
+            ]],
+            ['label' => Yii::t('app', 'Вход'), 'visible'=>Yii::$app->user->isGuest, 'url' => ['/site/login']],
         ]
     ]);
     NavBar::end();

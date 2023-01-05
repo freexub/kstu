@@ -8,7 +8,8 @@ use kartik\file\FileInput;
 /** @var app\models\Article $model */
 /** @var yii\widgets\ActiveForm $form */
 
-$this->title = $model->getTitle();
+$this->title = $model->title_ru;
+//$this->title = $model->getTitle();
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Статьи'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -19,45 +20,28 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?php $form = ActiveForm::begin(); ?>
     <div class="row">
-        <div class="col col-md-6">
+        <div class="col col-md-6 pt-4">
             <div class="card">
                 <div class="card-header">
-                    <?=Yii::t('app_article', 'Укажите тему публикации на 3х языках')?>
+                    <?=Yii::t('app_article', 'Укажите тему, ключевые слова, аннотацию')?>
                 </div>
                 <div class="card-body">
                     <?= $form->field($model, 'title_ru')->textarea(['rows' => 2, 'disabled' => true]) ?>
 
-                    <?= $form->field($model, 'title_kk')->textarea(['rows' => 2, 'disabled' => true]) ?>
+                    <?= $form->field($model, 'keywords_ru')->textarea(['rows' => 6, 'placeholder' => Yii::t('app_article', 'Укажите ключевые слова через точку с запятой, например, информатика; программирование'), 'disabled' => true]) ?>
 
-                    <?= $form->field($model, 'title_en')->textarea(['rows' => 2, 'disabled' => true]) ?>
-                </div>
-            </div>
-        </div>
-        <div class="col col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <?=Yii::t('app_article', 'Укажите ключевые слова на 3х языках')?>
-                </div>
-                <div class="card-body">
-                    <?= $form->field($model, 'keywords_ru')->textarea(['rows' => 2, 'placeholder' => Yii::t('app_article', 'Укажите ключевые слова через точку с запятой, например, информатика; программирование'), 'disabled' => true]) ?>
+                    <?= $form->field($model, 'annotation_ru')->textarea(['rows' => 12, 'disabled' => true]) ?>
 
-                    <?= $form->field($model, 'keywords_kk')->textarea(['rows' => 2, 'placeholder' => Yii::t('app_article', 'Укажите ключевые слова через точку с запятой, например, информатика; программирование'), 'disabled' => true]) ?>
-
-                    <?= $form->field($model, 'keywords_en')->textarea(['rows' => 2, 'placeholder' => Yii::t('app_article', 'Укажите ключевые слова через точку с запятой, например, информатика; программирование'), 'disabled' => true]) ?>
-                </div>
-            </div>
-        </div>
-        <div class="col col-md-6 pt-4">
-            <div class="card">
-                <div class="card-header">
-                    <?=Yii::t('app_article', 'Укажите аннотацию на 3х языках')?>
-                </div>
-                <div class="card-body">
-                    <?= $form->field($model, 'annotation_ru')->textarea(['rows' => 3, 'disabled' => true]) ?>
-
-                    <?= $form->field($model, 'annotation_kk')->textarea(['rows' => 3, 'disabled' => true]) ?>
-
-                    <?= $form->field($model, 'annotation_en')->textarea(['rows' => 3, 'disabled' => true]) ?>
+                    <?php if($model->commentJournal) { ?>
+                        <div class="card">
+                            <div class="card-header">
+                                <?=Yii::t('app_article', 'Укажите аннотацию на 3х языках')?>
+                            </div>
+                            <div class="card-body">
+                                <?= $form->field($model, 'commentJournal')->textarea(['rows' => 4, 'disabled' => true]) ?>
+                            </div>
+                        </div>
+                    <?php }?>
                 </div>
             </div>
         </div>
@@ -68,13 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 </div>
                 <div class="card-body">
                     <div class="row">
-                        <div class="col col-4">
+                        <div class="col col-6">
                             <?= Html::a(Yii::t('app', 'Статья'), ['get-file', 'id' => $model->id, 'type'=>'documentFile'], ['class' => 'btn btn-primary btn-block']) ?>
                         </div>
-                        <div class="col col-4">
-                            <?= Html::a(Yii::t('app', 'Чек оплаты'), ['get-file', 'id' => $model->id, 'type'=>'checkFile'], ['class' => 'btn btn-primary btn-block']) ?>
-                        </div>
-                        <div class="col col-4">
+                        <div class="col col-6">
                             <?= Html::a(Yii::t('app', 'Список авторов'), ['get-file', 'id' => $model->id, 'type'=>'authorsFile'], ['class' => 'btn btn-primary btn-block']) ?>
                         </div>
                     </div>

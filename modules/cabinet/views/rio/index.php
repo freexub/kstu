@@ -45,7 +45,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'=> function($data){
                     return $data->statuses->name_ru;
                 },
-                'filter' => false
+                'filter' => \yii\helpers\ArrayHelper::map(\app\models\JournalStatuses::find()->orderBy('sort ASC')->all(), 'id', 'name_'.Yii::$app->language),
             ],
             [
 //                'attribute' => 'status',

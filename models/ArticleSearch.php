@@ -68,14 +68,14 @@ class ArticleSearch extends Article
         ]);
 
         $query->andFilterWhere(['like', 'title_ru', $this->title_ru])
-            ->andFilterWhere(['like', 'title_kk', $this->title_kk])
-            ->andFilterWhere(['like', 'title_en', $this->title_en])
+//            ->andFilterWhere(['like', 'title_kk', $this->title_kk])
+//            ->andFilterWhere(['like', 'title_en', $this->title_en])
             ->andFilterWhere(['like', 'keywords_ru', $this->keywords_ru])
-            ->andFilterWhere(['like', 'keywords_kk', $this->keywords_kk])
-            ->andFilterWhere(['like', 'keywords_en', $this->keywords_en])
+//            ->andFilterWhere(['like', 'keywords_kk', $this->keywords_kk])
+//            ->andFilterWhere(['like', 'keywords_en', $this->keywords_en])
             ->andFilterWhere(['like', 'annotation_ru', $this->annotation_ru])
-            ->andFilterWhere(['like', 'annotation_kk', $this->annotation_kk])
-            ->andFilterWhere(['like', 'annotation_en', $this->annotation_en])
+//            ->andFilterWhere(['like', 'annotation_kk', $this->annotation_kk])
+//            ->andFilterWhere(['like', 'annotation_en', $this->annotation_en])
             ->andFilterWhere(['like', 'comment', $this->comment]);
 
         return $dataProvider;

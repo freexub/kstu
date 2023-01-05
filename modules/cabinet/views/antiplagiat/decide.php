@@ -23,15 +23,12 @@ use yii\widgets\DetailView;
     <!-- Modal body -->
     <div class="modal-body">
 
-        <?= $form->field($model, 'documentShortFile')->widget(FileInput::classname(), [
+        <?= $form->field($model, 'plagiatFile')->widget(FileInput::classname(), [
             //                        'options' => ['accept' => 'excel/*'],
             'pluginOptions' => ['showPreview' => false,'showUpload' => false,]
         ]);?>
 
-        <?php /*$form->field($model, 'stat')->dropDownList([3=>'Разрешить публикацию',11=>'Отклонить публикацию',2=>'На доработку'],['prompt'=>' - Изменить статус -']);*/?>
-        <?=$form->field($model, 'status')->dropDownList(\yii\helpers\ArrayHelper::map(\app\models\JournalStatuses::find()->where(['type'=>1])->orderBy('sort ASC')->all(), 'id', 'name_'.Yii::$app->language),['prompt'=>' - Изменить статус -']);?>
-
-        <?= $form->field($model, 'commentJournal')->textarea(['rows' => 6]) ?>
+        <?=$form->field($model, 'plagiatPoint')->textInput(['placeholder' => Yii::t('app_article', 'Процент оригинальности')]);?>
 
     </div>
 

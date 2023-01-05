@@ -14,7 +14,7 @@ use Yii;
 /**
  * ArticleController implements the CRUD actions for Article model.
  */
-class RioController extends Controller
+class AntiplagiatController extends Controller
 {
     /**
      * @inheritDoc
@@ -43,6 +43,7 @@ class RioController extends Controller
     {
         $searchModel = new ArticleSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->andWhere(['in','status',[3,4,5]]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -59,28 +60,38 @@ class RioController extends Controller
     public function actionView($id, $tab=0)
     {
         $model = $this->findModel($id);
-        $shortFile = $model->documentShortFile;
+        $plagiat = $model->plagiatFile;
         $date = date("d-m-Y_h-m-s");
-        $path = Yii::getAlias('@app') . '/runtime/uploads/article_short/';
+        $path = Yii::getAlias('@app') . '/runtime/uploads/antiplagiat/';
 
 //            var_dump($shortFile);die();
         if ($model->load($this->request->post())){
             $userId = $model->autor_id;
-            if (!empty($_FILES['Article']['name']['documentShortFile'])){
-                $documentShortFile = new UploadForm();
-                $documentShortFile->file = UploadedFile::getInstance($model, 'documentShortFile');
+            if (!empty($_FILES['Article']['name']['plagiatFile'])){
+                $plagiatFile = new UploadForm();
+                $plagiatFile->file = UploadedFile::getInstance($model, 'plagiatFile');
 
-                if (!empty($shortFile)){
-                    var_dump($shortFile);die();
-                    if (file_exists($path.$shortFile))
-                        unlink('/runtime/uploads/article_short/'.$shortFile);
+                if (!empty($plagiat)){
+//                    var_dump($plagiat);die();
+                    if (file_exists($path.$plagiat))
+                        unlink($path.$plagiat);
                 }
-                if ($documentShortFile->file && $documentShortFile->validate()) {
-                    $model->documentShortFile = $date . '_' . $userId . '_articleShort.' . $documentShortFile->file->extension;
-                    $documentShortFile->file->saveAs($path . $model->documentShortFile);
+                if ($plagiatFile->file && $plagiatFile->validate()) {
+                    $model->plagiatFile = $date . '_' . $userId . '_antiplagiat.' . $plagiatFile->file->extension;
+                    $plagiatFile->file->saveAs($path . $model->plagiatFile);
                 }
             }else{
-                $model->documentShortFile = $shortFile;
+                $model->plagiatFile = $plagiat;
+            }
+
+            if (!empty($model->plagiatPoint)){
+                $point = Yii::$app->params['plagiatMinPoint'];
+                if ($model->plagiatPoint < $point)
+                    $model->status = 4;
+                else
+                    $model->status = 6;
+            }else{
+                $model->status = 0;
             }
 
             if ($model->save()){

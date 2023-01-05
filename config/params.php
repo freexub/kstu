@@ -10,6 +10,7 @@ return [
         'kk' => 'Қазақша',
         'en' => 'English',
     ],
+    'plagiatMinPoint' => 50,
     'languageCodesInDatabase' => [
         'ru' => '1',
         'kk' => '2',

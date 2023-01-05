@@ -3,7 +3,8 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use kartik\file\FileInput;
-use yii\widgets\DetailView;
+use \yii\helpers\ArrayHelper;
+
 /**
  * Created by PhpStorm.
  * User: kenguru
@@ -23,15 +24,12 @@ use yii\widgets\DetailView;
     <!-- Modal body -->
     <div class="modal-body">
 
-        <?= $form->field($model, 'documentShortFile')->widget(FileInput::classname(), [
+        <?= $form->field($model, 'reviewFile')->widget(FileInput::classname(), [
             //                        'options' => ['accept' => 'excel/*'],
             'pluginOptions' => ['showPreview' => false,'showUpload' => false,]
         ]);?>
 
-        <?php /*$form->field($model, 'stat')->dropDownList([3=>'Разрешить публикацию',11=>'Отклонить публикацию',2=>'На доработку'],['prompt'=>' - Изменить статус -']);*/?>
-        <?=$form->field($model, 'status')->dropDownList(\yii\helpers\ArrayHelper::map(\app\models\JournalStatuses::find()->where(['type'=>1])->orderBy('sort ASC')->all(), 'id', 'name_'.Yii::$app->language),['prompt'=>' - Изменить статус -']);?>
-
-        <?= $form->field($model, 'commentJournal')->textarea(['rows' => 6]) ?>
+        <?=$form->field($model, 'stat')->dropDownList([1=>Yii::t('app','Резрешить'),2=>Yii::t('app','Отклонить'),3=>Yii::t('app','На доработку')])->label(Yii::t('app','Разрешить публикацию?'));?>
 
     </div>
 

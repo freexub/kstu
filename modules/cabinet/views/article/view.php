@@ -7,7 +7,7 @@ use yii\bootstrap4\Tabs;
 /** @var yii\web\View $this */
 /** @var app\modules\cabinet\models\Article $model */
 
-$this->title = $model->title;
+$this->title = $model->title_ru;
 $this->params['breadcrumbs'][] = ['label' => Yii::t('app', 'Статьи'), 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);

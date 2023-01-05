@@ -14,7 +14,7 @@ use Yii;
 /**
  * ArticleController implements the CRUD actions for Article model.
  */
-class RioController extends Controller
+class EditorialController extends Controller
 {
     /**
      * @inheritDoc
@@ -43,6 +43,7 @@ class RioController extends Controller
     {
         $searchModel = new ArticleSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
+        $dataProvider->query->andWhere(['>','status',2]);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -59,32 +60,11 @@ class RioController extends Controller
     public function actionView($id, $tab=0)
     {
         $model = $this->findModel($id);
-        $shortFile = $model->documentShortFile;
-        $date = date("d-m-Y_h-m-s");
-        $path = Yii::getAlias('@app') . '/runtime/uploads/article_short/';
 
-//            var_dump($shortFile);die();
         if ($model->load($this->request->post())){
-            $userId = $model->autor_id;
-            if (!empty($_FILES['Article']['name']['documentShortFile'])){
-                $documentShortFile = new UploadForm();
-                $documentShortFile->file = UploadedFile::getInstance($model, 'documentShortFile');
-
-                if (!empty($shortFile)){
-                    var_dump($shortFile);die();
-                    if (file_exists($path.$shortFile))
-                        unlink('/runtime/uploads/article_short/'.$shortFile);
-                }
-                if ($documentShortFile->file && $documentShortFile->validate()) {
-                    $model->documentShortFile = $date . '_' . $userId . '_articleShort.' . $documentShortFile->file->extension;
-                    $documentShortFile->file->saveAs($path . $model->documentShortFile);
-                }
-            }else{
-                $model->documentShortFile = $shortFile;
-            }
-
+            $model->status = 7;
             if ($model->save()){
-                Yii::$app->session->setFlash('success', Yii::t('app_article', 'Решение по статье принято! Статус: ' . $model->statuses->name_ru));
+                Yii::$app->session->setFlash('success', Yii::t('app_article', 'Назначен рецинзент: ' . $model->reviewerUser->fullName));
                 return $this->redirect(['index']);
             }
         }
@@ -117,20 +97,6 @@ class RioController extends Controller
     public function actionFile($id, $type){
        $model = $this->findModel($id);
        $model->getArticleFile($type);
-    }
-
-    /**
-     * Deletes an existing Article model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param int $id ID
-     * @return \yii\web\Response
-     * @throws NotFoundHttpException if the model cannot be found
-     */
-    public function actionDelete($id)
-    {
-        $model = $this->findModel($id);
-        $model->satus = 100;
-        return $this->redirect(['index']);
     }
 
     /**

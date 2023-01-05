@@ -33,7 +33,7 @@ class JournalCategory extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title_ru', 'title_kk', 'title_en', 'journal_id', 'sort'], 'required'],
+            [['title_ru', /*'title_kk', 'title_en',*/ 'journal_id', 'sort'], 'required'],
             [['status', 'journal_id', 'sort'], 'integer'],
             [['title_ru', 'title_kk', 'title_en'], 'string', 'max' => 150],
             [['journal_id'], 'exist', 'skipOnError' => true, 'targetClass' => JournalNumber::class, 'targetAttribute' => ['journal_id' => 'id']],
@@ -48,8 +48,8 @@ class JournalCategory extends \yii\db\ActiveRecord
         return [
             'id' => Yii::t('app', 'ID'),
             'title_ru' => Yii::t('app_article', 'Категория'),
-            'title_kk' => Yii::t('app', 'Title Kz'),
-            'title_en' => Yii::t('app', 'Title En'),
+//            'title_kk' => Yii::t('app', 'Title Kz'),
+//            'title_en' => Yii::t('app', 'Title En'),
             'status' => Yii::t('app', 'Status'),
             'journal_id' => Yii::t('app', 'Journal ID'),
             'sort' => Yii::t('app', 'Sort'),

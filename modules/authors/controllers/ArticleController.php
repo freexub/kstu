@@ -43,9 +43,9 @@ class ArticleController extends Controller
     {
         $searchModel = new ArticleSearch();
         $dataProvider = $searchModel->search($this->request->queryParams);
-        $dataProvider->query->andWhere([
-            'autor_id' => Yii::$app->user->id
-        ]);
+        $dataProvider->query->andWhere(['autor_id' => Yii::$app->user->id]);
+        $dataProvider->query->andWhere(['<', 'status', 100]);
+        $dataProvider->query->orderBy('id DESC');
 
         return $this->render('index', [
             'searchModel' => $searchModel,
@@ -61,13 +61,14 @@ class ArticleController extends Controller
      */
     public function actionView($id)
     {
-        if ($id == Yii::$app->user->id) {
-        }
+        $model = $this->findModel($id);
+        if ($model->autor_id == Yii::$app->user->id) {
             return $this->render('view2', [
-                'model' => $this->findModel($id),
+                'model' => $model,
             ]);
-
-        throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        }else{
+            throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        }
     }
 
     /**
@@ -79,13 +80,13 @@ class ArticleController extends Controller
     {
         $userId = Yii::$app->user->id;
         $model = new Article();
-        $check = new UploadForm();
         $article = new UploadForm();
         $authors = new UploadForm();
+//        $check = new UploadForm();
 
         if ($this->request->isPost) {
+//            $check->file = UploadedFile::getInstance($model, 'checkFile');
             $article->file = UploadedFile::getInstance($model, 'documentFile');
-            $check->file = UploadedFile::getInstance($model, 'checkFile');
             $authors->file = UploadedFile::getInstance($model, 'authorsFile');
 
             if ($model->load($this->request->post())) {
@@ -94,21 +95,22 @@ class ArticleController extends Controller
                 $path = Yii::getAlias('@app') . '/runtime/uploads/';
 
                 if ($article->file && $article->validate()) {
-                    $article->file->saveAs($path.'article/' . $date. '_' . $userId . '_article' . $article->file->extension);
                     $model->documentFile = $date. '_' . $userId . '_article' . '.' . $article->file->extension;
-                }
-
-                if ($check->file && $check->validate()) {
-                    $check->file->saveAs($path.'check/' . $date. '_' . $userId . '_check' . $check->file->extension);
-                    $model->checkFile =  $date. '_' . $userId . '_check'  . '.' . $check->file->extension;
+                    $article->file->saveAs($path.'article/' . $model->documentFile);
                 }
 
                 if ($authors->file && $authors->validate()) {
-                    $authors->file->saveAs($path.'authors/' . $date. '_' . $userId . '_authors' . $authors->file->extension);
                     $model->authorsFile =  $date. '_' . $userId . '_authors' . '.' . $authors->file->extension;
+                    $authors->file->saveAs($path.'authors/' . $model->authorsFile );
                 }
 
+//                if ($check->file && $check->validate()) {
+//                    $model->checkFile =  $date. '_' . $userId . '_check'  . '.' . $check->file->extension;
+//                    $check->file->saveAs($path.'check/' . $model->checkFile);
+//                }
+
                 $model->autor_id = Yii::$app->user->id;
+                $model->status = 1;
 
                 if ($model->save()){
                     Yii::$app->session->setFlash('success', Yii::t('app_article', 'Ваша статья успешно загружена!'));
@@ -129,6 +131,31 @@ class ArticleController extends Controller
         ]);
     }
 
+    public function actionFile($type){
+        if ($type == 'authorsTemplate'){
+            $fileOnPath = 'files/authors_template.xlsx';
+            $file = Yii::getAlias('@app') . '/runtime/uploads/'.$fileOnPath;
+            // проверка существования файла
+            if (file_exists($file)) {
+                // формирование заголовков, необходимых для скачивания файла
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/octet-stream');
+                header('Content-Disposition: attachment; filename='.basename($file ));
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: '.filesize($file));
+
+                // чтение файла и отдача его на загрузку
+                readfile($file);
+            } else {
+                echo 'Файл не найден';
+            }
+        }else{
+            throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
+        }
+    }
+
     public function actionGetFile($id, $type = ''){
         $model = $this->findModel($id);
         if ($model->autor_id == Yii::$app->user->id){
@@ -137,20 +164,14 @@ class ArticleController extends Controller
                 case 'documentFile':
                     $fileOnPath = 'article/' . $model->documentFile;
                     break;
-                case 'documentShortFile':
-                    $fileOnPath = 'article_short/' . $model->documentShortFile;
-                    break;
                 case 'checkFile':
                     $fileOnPath = 'check/' . $model->checkFile;
                     break;
-                case 'reviewFile':
-                    $fileOnPath = 'review/' . $model->reviewFile;
-                    break;
-                case 'plagiatFile':
-                    $fileOnPath = 'antiplagiat/' . $model->plagiatFile;
-                    break;
                 case 'authorsFile':
                     $fileOnPath = 'authors/' . $model->authorsFile;
+                    break;
+                case 'authorsTemplate':
+                    $fileOnPath = 'files/authors_template.xlsx';
                     break;
             }
 
@@ -185,56 +206,56 @@ class ArticleController extends Controller
     {
         $userId = Yii::$app->user->id;
         $model = $this->findModel($id);
-        $check = new UploadForm();
-        $article = new UploadForm();
-        $authors = new UploadForm();
+        if ($model->autor_id == $userId && $model->status < 3){
+            $check = new UploadForm();
+            $article = new UploadForm();
+            $authors = new UploadForm();
 
-        if ($this->request->isPost && $model->load($this->request->post())) {
-            $article->file = UploadedFile::getInstance($model, 'documentFile');
-            $check->file = UploadedFile::getInstance($model, 'checkFile');
-            $authors->file = UploadedFile::getInstance($model, 'authorsFile');
+            if ($this->request->isPost && $model->load($this->request->post())) {
+                $article->file = UploadedFile::getInstance($model, 'documentFile');
+                $check->file = UploadedFile::getInstance($model, 'checkFile');
+                $authors->file = UploadedFile::getInstance($model, 'authorsFile');
 
 
-            $date = date("d-m-Y_h-m-s");
-            $path = Yii::getAlias('@app') . '/runtime/uploads/';
+                $date = date("d-m-Y_h-m-s");
+                $path = Yii::getAlias('@app') . '/runtime/uploads/';
 
-            if ($article->file && $article->validate()) {
-                $article->file->saveAs($path.'article/' . $date. '_' . $userId . '_article.' . $article->file->extension);
-                $model->documentFile = $date. '_' . $userId . '_article.' . '.' . $article->file->extension;
-            }
+                if ($article->file && $article->validate()) {
+                    $model->documentFile = $date. '_' . $userId . '_article.' . $article->file->extension;
+                    $article->file->saveAs($path.'article/' . $model->documentFile);
+                }
 
-            if ($check->file && $check->validate()) {
-                $check->file->saveAs($path.'check/' . $date. '_' . $userId . '_check.' . $check->file->extension);
-                $model->checkFile =  $date. '_' . $userId . '_check.'  . '.' . $check->file->extension;
-            }
+                if ($check->file && $check->validate()) {
+                    $model->checkFile =  $date. '_' . $userId . '_check.' . $check->file->extension;
+                    $check->file->saveAs($path.'check/' . $model->checkFile);
+                }
 
-            if ($authors->file && $authors->validate()) {
-                $authors->file->saveAs($path.'authors/' . $date. '_' . $userId . '_authors.' . $authors->file->extension);
-                $model->authorsFile =  $date. '_' . $userId . '_authors.' . '.' . $authors->file->extension;
-            }
+                if ($authors->file && $authors->validate()) {
+                    $model->authorsFile =  $date. '_' . $userId . '_authors.' . $authors->file->extension;
+                    $authors->file->saveAs($path.'authors/' . $model->authorsFile);
+                }
 
-            $model->autor_id = Yii::$app->user->id;
+                $model->autor_id = Yii::$app->user->id;
 
-            if ($model->save()){
-                Yii::$app->session->setFlash('success', Yii::t('app_article', 'Ваша статья успешно загружена!'));
+                if ($model->save()){
+                    Yii::$app->session->setFlash('success', Yii::t('app_article', 'Ваша статья успешно загружена!'));
+                    return $this->redirect(['view', 'id' => $model->id]);
+                }else{
+                    var_dump($model->errors);die();
+                    Yii::$app->session->setFlash('warning', "warning!!! warning!!! warning!!!");
+                    return $this->redirect(['create']);
+                }
+                $model->autor_id = $user_id;
+                $model->save();
                 return $this->redirect(['view', 'id' => $model->id]);
-            }else{
-                var_dump($model->errors);die();
-                Yii::$app->session->setFlash('warning', "warning!!! warning!!! warning!!!");
-                return $this->redirect(['create']);
             }
 
-            $model->autor_id = $user_id;
-
-
-            $model->save();
-
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->render('update', [
+                'model' => $model,
+            ]);
+        }else{
+            throw new NotFoundHttpException(Yii::t('app', 'The requested page does not exist.'));
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     /**
@@ -246,8 +267,19 @@ class ArticleController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        if ($model->autor_id == Yii::$app->user->id) {
+            if ($model->delete()){
+                $fileOnPath = Yii::getAlias('@app') . '/runtime/uploads/';
+                /**
+                 * Доделать проверку существования файлов
+                 */
+                die();
+                unlink($fileOnPath.'article/'.$model->documentFile);
+                unlink($fileOnPath.'article/'.$model->checkFile);
+                unlink($fileOnPath.'article/'.$model->authorsFile);
+            }
+        }
         return $this->redirect(['index']);
     }
 
