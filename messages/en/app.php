@@ -14,10 +14,15 @@ return [
     'согласие на обработку персональных данных' => 'accept the processing of personal data',
     'Зарегистрироваться' => 'Submit the registration',
 
-    'Войти' => 'Log In',
-    'Вход' => 'Login',
+    'Архив' => 'Archive',
+    'Информация' => 'Information',
+    'Поиск' => 'Search',
+    'Подать статью' => 'Submit an article',
 
     'Статьи' => 'Articles',
+
+    'Войти' => 'Log In',
+    'Вход' => 'Login',
 
     'Главная' => '',
     'Запомнить меня' => 'Remember me',

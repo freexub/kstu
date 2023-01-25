@@ -53,15 +53,15 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
                 ['label' => Yii::t('app', 'Для рецензентов'), 'url' => ['#']],
                 ['label' => Yii::t('app', 'Транслитерация'), 'url' => ['#']],
             ]],
-            ['label' => Yii::t('app', 'О нас'), 'items' => [
-                ['label' => Yii::t('app', 'О журнале'), 'url' => ['#']],
-                ['label' => Yii::t('app', 'Редакционная политика'), 'url' => ['#']],
-                ['label' => Yii::t('app', 'Публикационная этика'), 'url' => ['#']],
-                ['label' => Yii::t('app', 'Редакционный совет'), 'url' => ['#']],
-                ['label' => Yii::t('app', 'Контакты'), 'url' => ['#']],
-            ]],
+//            ['label' => Yii::t('app', 'О нас'), 'items' => [
+//                ['label' => Yii::t('app', 'О журнале'), 'url' => ['#']],
+//                ['label' => Yii::t('app', 'Редакционная политика'), 'url' => ['#']],
+//                ['label' => Yii::t('app', 'Публикационная этика'), 'url' => ['#']],
+//                ['label' => Yii::t('app', 'Редакционный совет'), 'url' => ['#']],
+//                ['label' => Yii::t('app', 'Контакты'), 'url' => ['#']],
+//            ]],
             ['label' => Yii::t('app', 'Поиск'), 'url' => ['/site/about']],
-            ['label' => Yii::t('app', 'Подать статью'), 'linkOptions' => ['class' => 'btn btn-success', 'style'=>'color:#fff'],  'url' => ['/authors/article/create']],
+//            ['label' => Yii::t('app', 'Подать статью'), 'linkOptions' => ['class' => 'btn btn-success', 'style'=>'color:#fff'],  'url' => ['/authors/article/create']],
         ]
     ]);
 
@@ -83,7 +83,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
                 ['label' => Yii::t('app', 'Список моих статей'), 'active'=> $controller == 'article', 'visible'=>Yii::$app->user->can('Автор'), 'url' => ['/authors/article/index']],
 
-                '<div class="dropdown-divider"></div>',
+//                '<div class="dropdown-divider"></div>',
                 ['label' => Yii::t('app', 'Список пользователей'), 'active'=> $controller == 'profile', 'visible'=>Yii::$app->user->can('РИО'), 'url' => ['/cabinet/profile/index']],
                 '<div class="dropdown-divider"></div>',
                 ['label' => Yii::t('app', 'Выход'), 'visible'=>!Yii::$app->user->isGuest, 'url' => ['/site/logout'], 'class' => 'glyphicon glyphicon-arrow-left'],
@@ -110,7 +110,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 <footer id="footer" class="mt-auto py-3 bg-light" style="border-top: 1px solid #dfdfdf;">
     <div class="container">
         <div class="row text-muted">
-            <div class="col-md-8 text-center text-md-start"><?=Yii::t('app', 'Журнал Карагандинского технического университета имени Абылкаса Сагинова')?> &copy; <?= date('Y') ?> </div>
+            <div class="col-md-8 text-md-start"><?=Yii::t('app', 'mmet.kz')?> &copy; 2020-<?= date('Y') ?> </div>
             <div class="col-md-4 text-center text-md-end"><?= Yii::powered() ?></div>
         </div>
     </div>

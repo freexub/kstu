@@ -12,6 +12,7 @@ use Yii;
  * @property string $title_kk
  * @property string $title_en
  * @property int $status
+ * @property int $sort
  * @property string $poster
  * @property string $date_create
  * @property string $date_update
@@ -32,9 +33,9 @@ class Journals extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title_ru', 'title_kk', 'title_en', 'status', 'poster'], 'required'],
+            [['title_ru', 'status', 'poster'], 'required'],
             [['title_ru', 'title_kk', 'title_en'], 'string'],
-            [['status'], 'integer'],
+            [['status', 'sort'], 'integer'],
             [['date_create', 'date_update'], 'safe'],
             [['poster'], 'string', 'max' => 100],
         ];
@@ -46,10 +47,11 @@ class Journals extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => Yii::t('app', 'ID'),
+            'id' => Yii::t('app', 'Журнал'),
             'title_ru' => Yii::t('app_article', 'Журнал'),
             'title_kk' => Yii::t('app', 'Title Kk'),
             'title_en' => Yii::t('app', 'Title En'),
+            'sort' => Yii::t('app', 'Порядковый номер'),
             'status' => Yii::t('app', 'Status'),
             'poster' => Yii::t('app', 'Poster'),
             'date_create' => Yii::t('app', 'Date Create'),

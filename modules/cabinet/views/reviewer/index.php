@@ -10,7 +10,7 @@ use yii\grid\GridView;
 /** @var app\modules\cabinet\models\ArticleSearch $searchModel */
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
-$this->title = Yii::t('app', 'Articles');
+$this->title = Yii::t('app_article', 'Статьи');
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="article-index">

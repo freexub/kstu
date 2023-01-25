@@ -100,11 +100,12 @@ class Article extends \yii\db\ActiveRecord
             'date_create' => Yii::t('app_article', 'Дата создания'),
             'date_update' => Yii::t('app', 'Date Update'),
             'status' => Yii::t('app_article', 'Статус'),
-            'authorFullName' => Yii::t('app', 'ФИО автора'),
-            'authorsFile' => Yii::t('app', 'Прикрепите файл со списком авторов'),
-            'authorOrganization' => Yii::t('app', 'Организация'),
+            'authorFullName' => Yii::t('app_article', 'ФИО автора'),
+            'authorsFile' => Yii::t('app_article', 'Прикрепите файл со списком авторов'),
+            'authorOrganization' => Yii::t('app_article', 'Организация'),
             'authorEmail' => Yii::t('app', 'E-mail'),
-            'authorPhone' => Yii::t('app', 'Телефон'),
+            'authorPhone' => Yii::t('app_article', 'Телефон'),
+            'authorPhone' => Yii::t('app_article', 'Телефон'),
             'stat' => Yii::t('app', 'Статус'),
         ];
     }

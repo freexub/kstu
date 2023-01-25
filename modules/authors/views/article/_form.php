@@ -54,7 +54,7 @@ use kartik\file\FileInput;
                     ]);?>
 
 
-                    <a href="file?type=authorsTemplate" class="btn btn-success btn-block mb-3"><?=Yii::t('app','Шаблон списка авторов')?></a>
+                    <a href="file?type=authorsTemplate" class="btn btn-success btn-block mb-3"><?=Yii::t('app_article','Шаблон списка авторов')?></a>
 
                     <?= $form->field($model, 'comment')->textarea(['rows' => 3,'placeholder' => Yii::t('app_article', 'Комментарий для рецензента')])->label(false) ?>
 

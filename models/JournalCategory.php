@@ -51,8 +51,8 @@ class JournalCategory extends \yii\db\ActiveRecord
 //            'title_kk' => Yii::t('app', 'Title Kz'),
 //            'title_en' => Yii::t('app', 'Title En'),
             'status' => Yii::t('app', 'Status'),
-            'journal_id' => Yii::t('app', 'Journal ID'),
-            'sort' => Yii::t('app', 'Sort'),
+            'journal_id' => Yii::t('app', 'Журнал'),
+            'sort' => Yii::t('app', 'Порядковый номер'),
         ];
     }
 

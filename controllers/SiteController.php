@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\Journals;
 use app\models\Profile;
 use Yii;
 use yii\filters\AccessControl;
@@ -124,6 +125,7 @@ class SiteController extends Controller
      *
      * @return Response|string
      */
+
     public function actionContact()
     {
         $model = new ContactForm();
