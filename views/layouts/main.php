@@ -34,6 +34,10 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
 
     <?php $controller = Yii::$app->controller->id; ?>
     <?php
+    if (Yii::$app->user->isGuest)
+        $username = '';
+    else
+        $username = Yii::$app->user->identity->username;
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
@@ -75,7 +79,7 @@ $this->registerLinkTag(['rel' => 'icon', 'type' => 'image/x-icon', 'href' => Yii
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav'],
         'items' => [
-            ['label' => Yii::$app->user->identity->username, 'visible'=>!Yii::$app->user->isGuest, 'items' => [
+            ['label' => $username, 'visible'=>!Yii::$app->user->isGuest, 'items' => [
                 ['label' => Yii::t('app', 'Список статей РИО'), 'active'=> $controller == 'rio', 'visible'=>Yii::$app->user->can('РИО'), 'url' => ['/cabinet/rio/index']],
                 ['label' => Yii::t('app', 'Список статей Антиплагиат'), 'active'=> $controller == 'antiplagiat', 'visible'=>Yii::$app->user->can('Антиплагиат'), 'url' => ['/cabinet/antiplagiat/index']],
                 ['label' => Yii::t('app', 'Список статей Редколлегия'), 'active'=> $controller == 'editorial', 'visible'=>Yii::$app->user->can('Редколлегия'), 'url' => ['/cabinet/editorial/index']],
