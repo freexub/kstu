@@ -57,7 +57,7 @@ $config = [
             // заменяем стандартный урл.менеджер на наш.
             'languages' => ['ru', 'kk', 'en'],
             //список языков на который переводим сайт
-            'enableDefaultLanguageUrlCode' => true,
+            'enableDefaultLanguageUrlCode' => false,
             // показываем идентификатор языка по умолчанию, если false, то при в корне сайта не будет виден идентификатор языка  www.site.com/   , с true – www.site.com/ru
             'rules'=>[
                 '/' => 'site/index',
@@ -102,10 +102,10 @@ $config = [
         'allowActions' => [
             'site/*',
             'journals/*',
-            'rbac/*',
-            'gii/*',
-            'post/*',
-            'authors/*',
+//            'rbac/*',
+//            'gii/*',
+//            'post/*',
+//            'authors/*',
             // The actions listed here will be allowed to everyone including guests.
             // So, 'admin/*' should not appear here in the production, of course.
             // But in the earlier stages of your development, you may probably want to
