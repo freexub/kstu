@@ -4,12 +4,15 @@
  */
 return [
     'Регистрация' => 'Sign up',
+    'ФИО' => 'Fullname',
     'ФИО на казахском языке' => 'Fullname in Kazakh',
     'ФИО на русском языке' => 'Fullname in Russian',
     'ФИО на английском языке' => 'Fullname in English',
     'Email' => 'Email',
     'Логин' => 'Login',
     'Пароль' => 'Password',
+    'Подтверждение пароля' => 'Password confirmation',
+    'Пожалуйста, заполните следующие поля для регистрации:' => 'Please fill in the following fields for registration:',
     'Нажимая кнопку Зарегистрироваться Вы подтверждаете' => 'By clicking the Sign up button you confirm',
     'согласие на обработку персональных данных' => 'accept the processing of personal data',
     'Зарегистрироваться' => 'Submit the registration',

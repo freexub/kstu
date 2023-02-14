@@ -8,26 +8,27 @@ use yii\bootstrap4\ActiveForm;
 /* @var $profile \app\models\Profile */
 
 //$this->title = Yii::t('rbac-admin', 'Signup');
-$this->title = 'Регистрация';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = Yii::t('app', 'Регистрация');
+//$this->params['breadcrumbs'][] = $this->title;
 ?>
+
 <div class="site-signup">
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>Please fill out the following fields to signup:</p>
+    <p><?=Yii::t('app', 'Пожалуйста, заполните следующие поля для регистрации:')?></p>
     <?= Html::errorSummary($model) ?>
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-6 ">
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
-                <?= $form->field($profile, 'fullName_kk') ?>
-                <?= $form->field($profile, 'fullName_ru') ?>
-                <?= $form->field($profile, 'fullName_en') ?>
-                <?= $form->field($model, 'username') ?>
-                <?= $form->field($model, 'email') ?>
-                <?= $form->field($model, 'password')->passwordInput() ?>
-                <?= $form->field($model, 'retypePassword')->passwordInput() ?>
+                <?php /* $form->field($profile, 'fullName_kk')->textInput(['placeholder' => 'ФИО на русском языке'])->label(false) */?>
+                <?php /* $form->field($profile, 'fullName_en')->textInput(['placeholder' => 'ФИО на казахском языке'])->label(false) */ ?>
+                <?= $form->field($profile, 'fullName_ru')->textInput(['placeholder' => Yii::t('app', 'ФИО')])->label(false) ?>
+                <?= $form->field($model, 'username')->textInput(['placeholder' => Yii::t('app', 'Логин')])->label(false) ?>
+                <?= $form->field($model, 'email')->textInput(['placeholder' => Yii::t('app', 'Email')])->label(false) ?>
+                <?= $form->field($model, 'password')->passwordInput()->textInput(['placeholder' => Yii::t('app', 'Пароль')])->label(false) ?>
+                <?= $form->field($model, 'retypePassword')->passwordInput()->textInput(['placeholder' => Yii::t('app', 'Подтверждение пароля')])->label(false) ?>
                 <div class="form-group">
-                    <?= Html::submitButton('Регистрация', ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
+                    <?= Html::submitButton(Yii::t('app', 'Регистрация'), ['class' => 'btn btn-primary', 'name' => 'signup-button']) ?>
                 </div>
             <?php ActiveForm::end() ?>
         </div>

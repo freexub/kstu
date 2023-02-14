@@ -31,7 +31,7 @@ class Profile extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['fullName_ru', 'fullName_kk', 'fullName_en'], 'required'],
+            [['fullName_ru'/*, 'fullName_kk', 'fullName_en'*/], 'required'],
             [['status'], 'integer'],
             [['fullName_ru', 'fullName_kk', 'fullName_en'], 'string', 'max' => 50],
         ];
